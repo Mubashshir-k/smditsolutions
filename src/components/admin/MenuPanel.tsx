@@ -119,6 +119,7 @@ const MenuPanel = () => {
       setItemImageUrl(item.image_url || "");
       setItemCat(item.category_id);
       setItemAvailable(item.available);
+      setAllowInstructions(item.allow_instructions);
       const p = item.menu_item_pricing;
       setHasHalfFull(p?.has_half_full || false);
       setHalfPrice(p?.half_price != null ? String(p.half_price) : "");
