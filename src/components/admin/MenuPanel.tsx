@@ -23,6 +23,7 @@ interface MenuItem {
   description: string | null;
   image_url: string | null;
   available: boolean;
+  allow_instructions: boolean;
   sort_order: number;
   menu_item_pricing: Pricing | null;
 }
