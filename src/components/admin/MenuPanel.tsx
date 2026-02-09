@@ -23,6 +23,7 @@ interface MenuItem {
   description: string | null;
   image_url: string | null;
   available: boolean;
+  allow_instructions: boolean;
   sort_order: number;
   menu_item_pricing: Pricing | null;
 }
@@ -52,6 +53,7 @@ const MenuPanel = () => {
   const [halfPrice, setHalfPrice] = useState("");
   const [fullPrice, setFullPrice] = useState("");
   const [singlePrice, setSinglePrice] = useState("");
+  const [allowInstructions, setAllowInstructions] = useState(true);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [itemDialogOpen, setItemDialogOpen] = useState(false);
 
@@ -117,6 +119,7 @@ const MenuPanel = () => {
       setItemImageUrl(item.image_url || "");
       setItemCat(item.category_id);
       setItemAvailable(item.available);
+      setAllowInstructions(item.allow_instructions);
       const p = item.menu_item_pricing;
       setHasHalfFull(p?.has_half_full || false);
       setHalfPrice(p?.half_price != null ? String(p.half_price) : "");
@@ -129,6 +132,7 @@ const MenuPanel = () => {
       setItemImageUrl("");
       setItemCat(categories[0]?.id || "");
       setItemAvailable(true);
+      setAllowInstructions(true);
       setHasHalfFull(false);
       setHalfPrice("");
       setFullPrice("");
@@ -149,6 +153,7 @@ const MenuPanel = () => {
         image_url: itemImageUrl.trim() || null,
         category_id: itemCat,
         available: itemAvailable,
+        allow_instructions: allowInstructions,
       }).eq("id", editingItem.id);
     } else {
       const { data } = await supabase.from("menu_items").insert({
@@ -157,6 +162,7 @@ const MenuPanel = () => {
         image_url: itemImageUrl.trim() || null,
         category_id: itemCat,
         available: itemAvailable,
+        allow_instructions: allowInstructions,
       }).select("id").single();
       itemId = data?.id;
     }
@@ -289,6 +295,10 @@ const MenuPanel = () => {
                 <div className="flex items-center gap-2">
                   <Switch checked={itemAvailable} onCheckedChange={setItemAvailable} />
                   <Label>Available</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Switch checked={allowInstructions} onCheckedChange={setAllowInstructions} />
+                  <Label>Allow Cooking Instructions</Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <Switch checked={hasHalfFull} onCheckedChange={setHasHalfFull} />
