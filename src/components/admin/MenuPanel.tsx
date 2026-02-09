@@ -132,6 +132,7 @@ const MenuPanel = () => {
       setItemImageUrl("");
       setItemCat(categories[0]?.id || "");
       setItemAvailable(true);
+      setAllowInstructions(true);
       setHasHalfFull(false);
       setHalfPrice("");
       setFullPrice("");
