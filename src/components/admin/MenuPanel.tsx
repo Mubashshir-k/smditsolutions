@@ -53,6 +53,7 @@ const MenuPanel = () => {
   const [halfPrice, setHalfPrice] = useState("");
   const [fullPrice, setFullPrice] = useState("");
   const [singlePrice, setSinglePrice] = useState("");
+  const [allowInstructions, setAllowInstructions] = useState(true);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [itemDialogOpen, setItemDialogOpen] = useState(false);
 
