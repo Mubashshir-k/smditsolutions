@@ -43,7 +43,7 @@ const AdminDashboard = () => {
           <TabsContent value="orders"><OrdersPanel /></TabsContent>
           <TabsContent value="menu"><MenuPanel /></TabsContent>
           <TabsContent value="tables"><TablesPanel /></TabsContent>
-          <TabsContent value="settings"><SettingsPanel /></TabsContent>
+          
         </Tabs>
       </main>
     </div>
