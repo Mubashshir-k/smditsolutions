@@ -1,0 +1,147 @@
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+
+interface OrderItem {
+  id: string;
+  item_name: string;
+  portion: string;
+  quantity: number;
+  price: number;
+  subtotal: number;
+}
+
+interface Order {
+  id: string;
+  table_number: number;
+  status: string;
+  total: number;
+  created_at: string;
+  order_items?: OrderItem[];
+}
+
+const statusFlow: Record<string, string> = {
+  pending: "preparing",
+  preparing: "ready",
+  ready: "completed",
+};
+
+const statusColors: Record<string, string> = {
+  pending: "bg-warning text-warning-foreground",
+  preparing: "bg-primary text-primary-foreground",
+  ready: "bg-success text-success-foreground",
+  completed: "bg-muted text-muted-foreground",
+};
+
+const OrdersPanel = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const { toast } = useToast();
+
+  const fetchOrders = async () => {
+    const { data } = await supabase
+      .from("orders")
+      .select("*, order_items(*)")
+      .in("status", ["pending", "preparing", "ready"])
+      .order("created_at", { ascending: true });
+    if (data) setOrders(data);
+  };
+
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 5000);
+
+    const channel = supabase
+      .channel("orders-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => {
+        fetchOrders();
+      })
+      .subscribe();
+
+    return () => {
+      clearInterval(interval);
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const advanceStatus = async (order: Order) => {
+    const nextStatus = statusFlow[order.status];
+    if (!nextStatus) return;
+
+    const { error } = await supabase
+      .from("orders")
+      .update({ status: nextStatus })
+      .eq("id", order.id);
+
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      return;
+    }
+
+    if (nextStatus === "completed") {
+      await supabase
+        .from("tables")
+        .update({ active_order_id: null })
+        .eq("table_number", order.table_number);
+    }
+
+    fetchOrders();
+  };
+
+  if (orders.length === 0) {
+    return (
+      <div className="text-center py-12 text-muted-foreground">
+        <p className="text-lg">No active orders</p>
+        <p className="text-sm mt-1">Orders will appear here when customers place them</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-xl font-semibold">Live Orders ({orders.length})</h2>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {orders.map((order) => (
+          <Card key={order.id}>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base">Table {order.table_number}</CardTitle>
+                <Badge className={statusColors[order.status]}>{order.status}</Badge>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {new Date(order.created_at).toLocaleTimeString()}
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="space-y-1">
+                {order.order_items?.map((item) => (
+                  <div key={item.id} className="flex justify-between text-sm">
+                    <span>
+                      {item.quantity}x {item.item_name}
+                      {item.portion !== "single" && (
+                        <span className="text-muted-foreground ml-1">({item.portion})</span>
+                      )}
+                    </span>
+                    <span className="text-muted-foreground">₹{item.subtotal}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center justify-between pt-2 border-t">
+                <span className="font-semibold">Total: ₹{order.total}</span>
+                {statusFlow[order.status] && (
+                  <Button size="sm" onClick={() => advanceStatus(order)}>
+                    Mark {statusFlow[order.status]}
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default OrdersPanel;
