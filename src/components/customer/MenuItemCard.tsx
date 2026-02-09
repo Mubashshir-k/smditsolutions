@@ -137,7 +137,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
               placeholder="Add cooking instructions (e.g. Extra spicy, Less spicy, No onion, Less oil)"
               value={cartItem?.instructions || ""}
               onChange={(e) => updateInstructions(item.id, currentPortion, e.target.value)}
-              className="text-xs h-9 rounded-lg"
+              className="text-xs h-12 rounded-lg"
               maxLength={100}
             />
           )}
