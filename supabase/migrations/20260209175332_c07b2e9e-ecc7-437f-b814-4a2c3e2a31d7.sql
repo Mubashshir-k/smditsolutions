@@ -1,0 +1,1 @@
+ALTER TABLE public.menu_items ADD COLUMN allow_instructions boolean NOT NULL DEFAULT true;

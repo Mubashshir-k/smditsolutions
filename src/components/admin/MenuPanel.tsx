@@ -297,6 +297,10 @@ const MenuPanel = () => {
                   <Label>Available</Label>
                 </div>
                 <div className="flex items-center gap-2">
+                  <Switch checked={allowInstructions} onCheckedChange={setAllowInstructions} />
+                  <Label>Allow Cooking Instructions</Label>
+                </div>
+                <div className="flex items-center gap-2">
                   <Switch checked={hasHalfFull} onCheckedChange={setHasHalfFull} />
                   <Label>Half/Full Pricing</Label>
                 </div>

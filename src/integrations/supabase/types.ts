@@ -75,6 +75,7 @@ export type Database = {
       }
       menu_items: {
         Row: {
+          allow_instructions: boolean
           available: boolean
           category_id: string
           created_at: string
@@ -85,6 +86,7 @@ export type Database = {
           sort_order: number
         }
         Insert: {
+          allow_instructions?: boolean
           available?: boolean
           category_id: string
           created_at?: string
@@ -95,6 +97,7 @@ export type Database = {
           sort_order?: number
         }
         Update: {
+          allow_instructions?: boolean
           available?: boolean
           category_id?: string
           created_at?: string
