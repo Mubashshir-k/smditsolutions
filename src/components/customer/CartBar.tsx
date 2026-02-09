@@ -3,6 +3,7 @@ import { useCart } from "@/hooks/useCart";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -14,15 +15,13 @@ interface Props {
 const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
   const { items, total, itemCount, updateQuantity, removeItem, clearCart } = useCart();
   const [submitting, setSubmitting] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const { toast } = useToast();
-
-  if (itemCount === 0) return null;
 
   const placeOrder = async () => {
     setSubmitting(true);
 
-    // Check if table has active order
     const { data: table } = await supabase
       .from("tables")
       .select("active_order_id")
@@ -36,10 +35,10 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
         variant: "destructive",
       });
       setSubmitting(false);
+      setConfirmOpen(false);
       return;
     }
 
-    // Create order
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .insert({ table_number: tableNumber, total, status: "pending" })
@@ -49,10 +48,10 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
     if (orderError || !order) {
       toast({ title: "Error placing order", description: orderError?.message, variant: "destructive" });
       setSubmitting(false);
+      setConfirmOpen(false);
       return;
     }
 
-    // Create order items
     const orderItems = items.map((item) => ({
       order_id: order.id,
       item_name: item.name,
@@ -66,91 +65,135 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
     if (itemsError) {
       toast({ title: "Error", description: itemsError.message, variant: "destructive" });
       setSubmitting(false);
+      setConfirmOpen(false);
       return;
     }
 
-    // Lock table
     await supabase.from("tables").update({ active_order_id: order.id }).eq("table_number", tableNumber);
 
     clearCart();
-    setOpen(false);
+    setConfirmOpen(false);
+    setSheetOpen(false);
     setSubmitting(false);
     onOrderPlaced();
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-card/95 backdrop-blur-sm shadow-lg">
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <button className="w-full flex items-center justify-between px-4 py-3">
-            <div className="flex items-center gap-2">
+    <>
+      {/* Floating cart button - top right */}
+      {itemCount > 0 && (
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+          <SheetTrigger asChild>
+            <button className="fixed top-3 right-4 z-50 flex items-center gap-2 bg-primary text-primary-foreground rounded-full pl-3 pr-4 py-2 shadow-lg">
               <div className="relative">
-                <ShoppingCart className="h-5 w-5 text-primary" />
-                <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="absolute -top-2 -right-2.5 bg-accent text-accent-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
                   {itemCount}
                 </span>
               </div>
-              <span className="text-sm text-muted-foreground">Table {tableNumber}</span>
+              <span className="font-semibold text-sm">₹{total}</span>
+            </button>
+          </SheetTrigger>
+          <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-2xl">
+            <SheetHeader>
+              <SheetTitle className="text-left">Your Order — Table {tableNumber}</SheetTitle>
+            </SheetHeader>
+            <div className="mt-4 space-y-3">
+              {items.map((item) => (
+                <div
+                  key={`${item.itemId}-${item.portion}`}
+                  className="flex items-center justify-between py-2 border-b last:border-0"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm">{item.name}</p>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      {item.portion !== "single" && (
+                        <span className="capitalize">{item.portion}</span>
+                      )}
+                      <span>₹{item.price} × {item.quantity}</span>
+                      <span className="font-semibold text-foreground">= ₹{item.price * item.quantity}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-7 w-7"
+                      onClick={() => updateQuantity(item.itemId, item.portion, item.quantity - 1)}
+                    >
+                      <Minus className="h-3 w-3" />
+                    </Button>
+                    <span className="w-5 text-center text-sm font-medium">{item.quantity}</span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-7 w-7"
+                      onClick={() => updateQuantity(item.itemId, item.portion, item.quantity + 1)}
+                    >
+                      <Plus className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 text-destructive"
+                      onClick={() => removeItem(item.itemId, item.portion)}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+
+              <div className="border-t pt-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold">Total</span>
+                  <span className="text-lg font-bold text-primary">₹{total}</span>
+                </div>
+                <Button
+                  className="w-full h-12 text-base font-semibold"
+                  onClick={() => setConfirmOpen(true)}
+                >
+                  Place Order — ₹{total}
+                </Button>
+              </div>
             </div>
-            <span className="font-bold text-foreground text-lg">₹{total}</span>
-          </button>
-        </SheetTrigger>
-        <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>Your Order — Table {tableNumber}</SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 space-y-3">
+          </SheetContent>
+        </Sheet>
+      )}
+
+      {/* Confirmation dialog */}
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Confirm Your Order</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2 my-2">
+            <p className="text-sm text-muted-foreground">Table {tableNumber}</p>
             {items.map((item) => (
-              <div
-                key={`${item.itemId}-${item.portion}`}
-                className="flex items-center justify-between"
-              >
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm">{item.name}</p>
-                  {item.portion !== "single" && (
-                    <p className="text-xs text-muted-foreground capitalize">{item.portion}</p>
-                  )}
-                  <p className="text-xs text-muted-foreground">₹{item.price} each</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={() => updateQuantity(item.itemId, item.portion, item.quantity - 1)}
-                  >
-                    <Minus className="h-3 w-3" />
-                  </Button>
-                  <span className="w-6 text-center text-sm font-medium">{item.quantity}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={() => updateQuantity(item.itemId, item.portion, item.quantity + 1)}
-                  >
-                    <Plus className="h-3 w-3" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={() => removeItem(item.itemId, item.portion)}
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
+              <div key={`${item.itemId}-${item.portion}`} className="flex justify-between text-sm">
+                <span>
+                  {item.quantity}× {item.name}
+                  {item.portion !== "single" && <span className="text-muted-foreground ml-1">({item.portion})</span>}
+                </span>
+                <span>₹{item.price * item.quantity}</span>
               </div>
             ))}
-            <div className="border-t pt-3 flex items-center justify-between">
-              <span className="font-bold text-lg">Total: ₹{total}</span>
-              <Button onClick={placeOrder} disabled={submitting} className="px-6">
-                {submitting ? "Placing..." : "Place Order"}
-              </Button>
+            <div className="border-t pt-2 flex justify-between font-bold">
+              <span>Total</span>
+              <span className="text-primary">₹{total}</span>
             </div>
           </div>
-        </SheetContent>
-      </Sheet>
-    </div>
+          <DialogFooter className="flex-row gap-2">
+            <Button variant="outline" className="flex-1" onClick={() => setConfirmOpen(false)} disabled={submitting}>
+              Go Back
+            </Button>
+            <Button className="flex-1" onClick={placeOrder} disabled={submitting}>
+              {submitting ? "Placing..." : "Confirm Order"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

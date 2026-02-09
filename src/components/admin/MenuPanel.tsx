@@ -45,6 +45,7 @@ const MenuPanel = () => {
 
   const [itemName, setItemName] = useState("");
   const [itemDesc, setItemDesc] = useState("");
+  const [itemImageUrl, setItemImageUrl] = useState("");
   const [itemCat, setItemCat] = useState("");
   const [itemAvailable, setItemAvailable] = useState(true);
   const [hasHalfFull, setHasHalfFull] = useState(false);
@@ -113,6 +114,7 @@ const MenuPanel = () => {
       setEditingItem(item);
       setItemName(item.name);
       setItemDesc(item.description || "");
+      setItemImageUrl(item.image_url || "");
       setItemCat(item.category_id);
       setItemAvailable(item.available);
       const p = item.menu_item_pricing;
@@ -124,6 +126,7 @@ const MenuPanel = () => {
       setEditingItem(null);
       setItemName("");
       setItemDesc("");
+      setItemImageUrl("");
       setItemCat(categories[0]?.id || "");
       setItemAvailable(true);
       setHasHalfFull(false);
@@ -143,6 +146,7 @@ const MenuPanel = () => {
       await supabase.from("menu_items").update({
         name: itemName.trim(),
         description: itemDesc.trim() || null,
+        image_url: itemImageUrl.trim() || null,
         category_id: itemCat,
         available: itemAvailable,
       }).eq("id", editingItem.id);
@@ -150,6 +154,7 @@ const MenuPanel = () => {
       const { data } = await supabase.from("menu_items").insert({
         name: itemName.trim(),
         description: itemDesc.trim() || null,
+        image_url: itemImageUrl.trim() || null,
         category_id: itemCat,
         available: itemAvailable,
       }).select("id").single();
@@ -262,6 +267,13 @@ const MenuPanel = () => {
                 <div className="space-y-2">
                   <Label>Description</Label>
                   <Input value={itemDesc} onChange={(e) => setItemDesc(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Image URL</Label>
+                  <Input value={itemImageUrl} onChange={(e) => setItemImageUrl(e.target.value)} placeholder="https://example.com/image.jpg" />
+                  {itemImageUrl && (
+                    <img src={itemImageUrl} alt="Preview" className="h-20 w-20 rounded-lg object-cover border" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label>Category</Label>
