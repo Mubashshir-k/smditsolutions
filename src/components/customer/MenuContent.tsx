@@ -28,6 +28,7 @@ interface Category {
 const MenuContent = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [items, setItems] = useState<MenuItemData[]>([]);
+  const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -49,6 +50,10 @@ const MenuContent = () => {
     };
     fetchMenu();
   }, []);
+
+  const handleToggleExpand = (itemId: string) => {
+    setExpandedItemId((prev) => (prev === itemId ? null : itemId));
+  };
 
   const grouped = categories
     .map((cat) => ({
@@ -74,7 +79,12 @@ const MenuContent = () => {
           </h2>
           <div className="space-y-2">
             {group.items.map((item) => (
-              <MenuItemCard key={item.id} item={item} />
+              <MenuItemCard
+                key={item.id}
+                item={item}
+                isExpanded={expandedItemId === item.id}
+                onToggleExpand={() => handleToggleExpand(item.id)}
+              />
             ))}
           </div>
         </section>
