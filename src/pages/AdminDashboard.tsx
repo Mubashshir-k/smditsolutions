@@ -2,11 +2,10 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogOut, ClipboardList, UtensilsCrossed, Grid3X3, Settings } from "lucide-react";
+import { LogOut, ClipboardList, UtensilsCrossed, Grid3X3 } from "lucide-react";
 import OrdersPanel from "@/components/admin/OrdersPanel";
 import MenuPanel from "@/components/admin/MenuPanel";
 import TablesPanel from "@/components/admin/TablesPanel";
-import SettingsPanel from "@/components/admin/SettingsPanel";
 
 const AdminDashboard = () => {
   const { signOut } = useAuth();
