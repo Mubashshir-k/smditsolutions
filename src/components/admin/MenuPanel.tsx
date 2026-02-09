@@ -153,6 +153,7 @@ const MenuPanel = () => {
         image_url: itemImageUrl.trim() || null,
         category_id: itemCat,
         available: itemAvailable,
+        allow_instructions: allowInstructions,
       }).eq("id", editingItem.id);
     } else {
       const { data } = await supabase.from("menu_items").insert({
@@ -161,6 +162,7 @@ const MenuPanel = () => {
         image_url: itemImageUrl.trim() || null,
         category_id: itemCat,
         available: itemAvailable,
+        allow_instructions: allowInstructions,
       }).select("id").single();
       itemId = data?.id;
     }
