@@ -15,6 +15,7 @@ export interface MenuItemData {
   description: string | null;
   image_url: string | null;
   available: boolean;
+  allow_instructions: boolean;
   category_id: string;
   menu_item_pricing: Pricing | null;
 }

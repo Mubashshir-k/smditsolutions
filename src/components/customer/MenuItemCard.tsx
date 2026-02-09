@@ -132,13 +132,15 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
           )}
 
           {/* Instructions input */}
-          <Input
-            placeholder="Add cooking instructions (e.g. Extra spicy, Less spicy, No onion, Less oil)"
-            value={cartItem?.instructions || ""}
-            onChange={(e) => updateInstructions(item.id, currentPortion, e.target.value)}
-            className="text-xs h-9 rounded-lg"
-            maxLength={100}
-          />
+          {item.allow_instructions && (
+            <Input
+              placeholder="Add cooking instructions (e.g. Extra spicy, Less spicy, No onion, Less oil)"
+              value={cartItem?.instructions || ""}
+              onChange={(e) => updateInstructions(item.id, currentPortion, e.target.value)}
+              className="text-xs h-9 rounded-lg"
+              maxLength={100}
+            />
+          )}
 
           {/* Quantity controls */}
           <div className="flex items-center justify-center gap-3">
