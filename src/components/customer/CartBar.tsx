@@ -59,6 +59,7 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
       quantity: item.quantity,
       price: item.price,
       subtotal: item.price * item.quantity,
+      instructions: item.instructions?.trim() || null,
     }));
 
     const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
@@ -113,6 +114,9 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
                       <span>₹{item.price} × {item.quantity}</span>
                       <span className="font-semibold text-foreground">= ₹{item.price * item.quantity}</span>
                     </div>
+                    {item.instructions && (
+                      <p className="text-xs text-muted-foreground italic mt-0.5">📝 {item.instructions}</p>
+                    )}
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Button
@@ -170,12 +174,17 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
           <div className="space-y-2 my-2">
             <p className="text-sm text-muted-foreground">Table {tableNumber}</p>
             {items.map((item) => (
-              <div key={`${item.itemId}-${item.portion}`} className="flex justify-between text-sm">
-                <span>
-                  {item.quantity}× {item.name}
-                  {item.portion !== "single" && <span className="text-muted-foreground ml-1">({item.portion})</span>}
-                </span>
-                <span>₹{item.price * item.quantity}</span>
+              <div key={`${item.itemId}-${item.portion}`} className="text-sm">
+                <div className="flex justify-between">
+                  <span>
+                    {item.quantity}× {item.name}
+                    {item.portion !== "single" && <span className="text-muted-foreground ml-1">({item.portion})</span>}
+                  </span>
+                  <span>₹{item.price * item.quantity}</span>
+                </div>
+                {item.instructions && (
+                  <p className="text-xs text-muted-foreground italic ml-4">📝 {item.instructions}</p>
+                )}
               </div>
             ))}
             <div className="border-t pt-2 flex justify-between font-bold">

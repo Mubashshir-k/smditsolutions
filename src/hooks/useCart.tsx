@@ -6,6 +6,7 @@ export interface CartItem {
   portion: "half" | "full" | "single";
   price: number;
   quantity: number;
+  instructions: string;
 }
 
 interface CartContextType {
@@ -13,6 +14,7 @@ interface CartContextType {
   addItem: (item: Omit<CartItem, "quantity">) => void;
   removeItem: (itemId: string, portion: string) => void;
   updateQuantity: (itemId: string, portion: string, quantity: number) => void;
+  updateInstructions: (itemId: string, portion: string, instructions: string) => void;
   clearCart: () => void;
   total: number;
   itemCount: number;
@@ -55,13 +57,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   }, [removeItem]);
 
+  const updateInstructions = useCallback((itemId: string, portion: string, instructions: string) => {
+    setItems((prev) =>
+      prev.map((i) =>
+        i.itemId === itemId && i.portion === portion ? { ...i, instructions } : i
+      )
+    );
+  }, []);
+
   const clearCart = useCallback(() => setItems([]), []);
 
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, total, itemCount }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, updateInstructions, clearCart, total, itemCount }}>
       {children}
     </CartContext.Provider>
   );
