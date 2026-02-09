@@ -184,22 +184,46 @@ export type Database = {
       }
       restaurant_settings: {
         Row: {
+          address: string | null
           created_at: string
+          currency_symbol: string
+          description: string | null
           id: string
+          logo_url: string | null
           name: string
+          opening_hours: string | null
+          phone: string | null
+          tax_percent: number
           updated_at: string
+          wifi_password: string | null
         }
         Insert: {
+          address?: string | null
           created_at?: string
+          currency_symbol?: string
+          description?: string | null
           id?: string
+          logo_url?: string | null
           name?: string
+          opening_hours?: string | null
+          phone?: string | null
+          tax_percent?: number
           updated_at?: string
+          wifi_password?: string | null
         }
         Update: {
+          address?: string | null
           created_at?: string
+          currency_symbol?: string
+          description?: string | null
           id?: string
+          logo_url?: string | null
           name?: string
+          opening_hours?: string | null
+          phone?: string | null
+          tax_percent?: number
           updated_at?: string
+          wifi_password?: string | null
         }
         Relationships: []
       }
