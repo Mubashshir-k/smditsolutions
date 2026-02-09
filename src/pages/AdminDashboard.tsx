@@ -25,7 +25,7 @@ const AdminDashboard = () => {
 
       <main className="max-w-5xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full grid grid-cols-4 mb-6">
+          <TabsList className="w-full grid grid-cols-3 mb-6">
             <TabsTrigger value="orders" className="gap-1.5 text-xs sm:text-sm">
               <ClipboardList className="h-4 w-4" />
               <span className="hidden sm:inline">Orders</span>
@@ -37,10 +37,6 @@ const AdminDashboard = () => {
             <TabsTrigger value="tables" className="gap-1.5 text-xs sm:text-sm">
               <Grid3X3 className="h-4 w-4" />
               <span className="hidden sm:inline">Tables</span>
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="gap-1.5 text-xs sm:text-sm">
-              <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">Settings</span>
             </TabsTrigger>
           </TabsList>
 
