@@ -77,8 +77,8 @@ const CustomerMenu = () => {
 
   return (
     <CartProvider>
-      <div className="min-h-screen bg-background pb-24">
-        <header className="sticky top-0 z-50 border-b bg-card/90 backdrop-blur-sm px-4 py-3">
+      <div className="min-h-screen bg-background pb-6">
+        <header className="sticky top-0 z-40 border-b bg-card/90 backdrop-blur-sm px-4 py-3 pr-24">
           <h1 className="text-lg font-bold text-foreground">{restaurantName}</h1>
           <p className="text-sm text-muted-foreground">Table {tableNumber}</p>
         </header>
