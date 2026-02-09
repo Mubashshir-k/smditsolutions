@@ -12,6 +12,7 @@ interface OrderItem {
   quantity: number;
   price: number;
   subtotal: number;
+  instructions: string | null;
 }
 
 interface Order {
@@ -117,14 +118,19 @@ const OrdersPanel = () => {
             <CardContent className="space-y-3">
               <div className="space-y-1">
                 {order.order_items?.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm">
-                    <span>
-                      {item.quantity}x {item.item_name}
-                      {item.portion !== "single" && (
-                        <span className="text-muted-foreground ml-1">({item.portion})</span>
-                      )}
-                    </span>
-                    <span className="text-muted-foreground">₹{item.subtotal}</span>
+                  <div key={item.id} className="text-sm">
+                    <div className="flex justify-between">
+                      <span>
+                        {item.quantity}x {item.item_name}
+                        {item.portion !== "single" && (
+                          <span className="text-muted-foreground ml-1">({item.portion})</span>
+                        )}
+                      </span>
+                      <span className="text-muted-foreground">₹{item.subtotal}</span>
+                    </div>
+                    {item.instructions && (
+                      <p className="text-xs text-muted-foreground italic ml-4">📝 {item.instructions}</p>
+                    )}
                   </div>
                 ))}
               </div>
