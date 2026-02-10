@@ -18,8 +18,7 @@ interface Settings {
   currency_symbol: string;
   opening_hours: string;
   logo_url: string;
-  wifi_password: string;
-  tax_percent: number;
+    tax_percent: number;
 }
 
 const SettingsPanel = () => {
