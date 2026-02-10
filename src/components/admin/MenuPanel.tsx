@@ -107,7 +107,7 @@ const MenuPanel = () => {
 
   const deleteCategory = async (id: string) => {
     const { error } = await supabase.from("food_categories").delete().eq("id", id);
-    if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
+    if (error) toast({ title: "Error", description: getUserFriendlyError(error), variant: "destructive" });
     else fetchData();
   };
 

@@ -37,7 +37,7 @@ const TablesPanel = () => {
 
     const { error } = await supabase.from("tables").insert({ table_number: num });
     if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      toast({ title: "Error", description: getUserFriendlyError(error), variant: "destructive" });
     } else {
       setNewTableNum("");
       setDialogOpen(false);

@@ -78,7 +78,7 @@ const OrdersPanel = () => {
       .eq("id", order.id);
 
     if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      toast({ title: "Error", description: getUserFriendlyError(error), variant: "destructive" });
       return;
     }
 

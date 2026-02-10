@@ -65,7 +65,7 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
 
     const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
     if (itemsError) {
-      toast({ title: "Error", description: itemsError.message, variant: "destructive" });
+      toast({ title: "Error", description: getUserFriendlyError(itemsError), variant: "destructive" });
       setSubmitting(false);
       setConfirmOpen(false);
       return;
