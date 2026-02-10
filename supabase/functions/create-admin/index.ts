@@ -37,9 +37,12 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Generate a strong random password instead of using a hardcoded one
+    const password = crypto.randomUUID() + "!Aa1";
+
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email: adminEmail,
-      password: "admin123",
+      password: password,
       email_confirm: true,
     });
 
@@ -53,11 +56,16 @@ Deno.serve(async (req) => {
     if (roleError) throw roleError;
 
     return new Response(
-      JSON.stringify({ message: "Admin created with role", user: data.user?.id }),
+      JSON.stringify({
+        message: "Admin created with role",
+        user: data.user?.id,
+        password: password,
+        note: "Save this password immediately - it will not be shown again. Change it after first login.",
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+  } catch (_error) {
+    return new Response(JSON.stringify({ error: "An internal error occurred" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

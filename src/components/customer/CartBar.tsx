@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getUserFriendlyError } from "@/lib/errorUtils";
 
 interface Props {
   tableNumber: number;
@@ -46,7 +47,7 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
       .single();
 
     if (orderError || !order) {
-      toast({ title: "Error placing order", description: orderError?.message, variant: "destructive" });
+      toast({ title: "Error placing order", description: getUserFriendlyError(orderError), variant: "destructive" });
       setSubmitting(false);
       setConfirmOpen(false);
       return;
@@ -64,7 +65,7 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
 
     const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
     if (itemsError) {
-      toast({ title: "Error", description: itemsError.message, variant: "destructive" });
+      toast({ title: "Error", description: getUserFriendlyError(itemsError), variant: "destructive" });
       setSubmitting(false);
       setConfirmOpen(false);
       return;

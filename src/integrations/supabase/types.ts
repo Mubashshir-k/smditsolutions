@@ -186,7 +186,15 @@ export type Database = {
           total?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_orders_table_number"
+            columns: ["table_number"]
+            isOneToOne: false
+            referencedRelation: "tables"
+            referencedColumns: ["table_number"]
+          },
+        ]
       }
       restaurant_settings: {
         Row: {

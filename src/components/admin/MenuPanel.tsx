@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { getUserFriendlyError } from "@/lib/errorUtils";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 
 interface Category {
@@ -106,7 +107,7 @@ const MenuPanel = () => {
 
   const deleteCategory = async (id: string) => {
     const { error } = await supabase.from("food_categories").delete().eq("id", id);
-    if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
+    if (error) toast({ title: "Error", description: getUserFriendlyError(error), variant: "destructive" });
     else fetchData();
   };
 

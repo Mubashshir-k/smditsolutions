@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { getUserFriendlyError } from "@/lib/errorUtils";
 import { Store, Phone, MapPin, Clock, Wifi, Receipt, Image } from "lucide-react";
 
 interface Settings {
@@ -76,7 +77,7 @@ const SettingsPanel = () => {
       .neq("id", "");
     setLoading(false);
     if (error) {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
+      toast({ title: "Error", description: getUserFriendlyError(error), variant: "destructive" });
     } else {
       toast({ title: "Settings saved successfully!" });
     }
