@@ -12,9 +12,46 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Require service role key for authentication
+    const authHeader = req.headers.get("Authorization");
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+    if (!authHeader || !authHeader.replace("Bearer ", "") .trim() !== serviceRoleKey) {
+      // Fallback: check if caller is an authenticated admin
+      const supabaseAuth = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_ANON_KEY")!,
+        { global: { headers: { Authorization: authHeader || "" } } }
+      );
+      const { data: { user } } = await supabaseAuth.auth.getUser();
+      if (!user) {
+        return new Response(
+          JSON.stringify({ error: "Unauthorized" }),
+          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      // Check if user is admin
+      const supabaseCheck = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        serviceRoleKey
+      );
+      const { data: roleData } = await supabaseCheck
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .single();
+      if (!roleData) {
+        return new Response(
+          JSON.stringify({ error: "Forbidden" }),
+          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
+
     const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      serviceRoleKey
     );
 
     const adminEmail = "admin@restaurant.com";
