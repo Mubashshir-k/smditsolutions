@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { useCart } from "@/hooks/useCart";
 import { Plus, Minus } from "lucide-react";
 import type { MenuItemData } from "./MenuContent";
@@ -100,7 +100,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
       <div
         className="overflow-hidden transition-all duration-200"
         style={{
-          maxHeight: isExpanded ? "300px" : "0px",
+          maxHeight: isExpanded ? "400px" : "0px",
           opacity: isExpanded ? 1 : 0,
         }}
       >
@@ -133,11 +133,11 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
 
           {/* Instructions input */}
           {item.allow_instructions && (
-            <Input
+            <textarea
               placeholder="Add cooking instructions (e.g. Extra spicy, Less spicy, No onion, Less oil)"
               value={cartItem?.instructions || ""}
               onChange={(e) => updateInstructions(item.id, currentPortion, e.target.value)}
-              className="text-xs h-12 rounded-lg"
+              className="flex w-full rounded-lg border border-input bg-background px-3 py-2 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-24 resize-none"
               maxLength={100}
             />
           )}
