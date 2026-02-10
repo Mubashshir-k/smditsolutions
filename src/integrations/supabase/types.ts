@@ -209,7 +209,6 @@ export type Database = {
           phone: string | null
           tax_percent: number
           updated_at: string
-          wifi_password: string | null
         }
         Insert: {
           address?: string | null
@@ -223,7 +222,6 @@ export type Database = {
           phone?: string | null
           tax_percent?: number
           updated_at?: string
-          wifi_password?: string | null
         }
         Update: {
           address?: string | null
@@ -237,7 +235,6 @@ export type Database = {
           phone?: string | null
           tax_percent?: number
           updated_at?: string
-          wifi_password?: string | null
         }
         Relationships: []
       }

@@ -159,11 +159,6 @@ const SettingsPanel = () => {
               placeholder="Mon–Sat: 11am – 11pm, Sun: 12pm – 10pm"
             />
           </div>
-          <div className="space-y-2">
-            <Label className="flex items-center gap-1.5"><Wifi className="h-3.5 w-3.5" /> WiFi Password</Label>
-            <Input value={settings.wifi_password} onChange={(e) => update("wifi_password", e.target.value)} placeholder="restaurant_wifi_2024" />
-            <p className="text-xs text-muted-foreground">Displayed on customer menu for convenience</p>
-          </div>
         </CardContent>
       </Card>
 
