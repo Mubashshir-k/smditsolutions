@@ -46,7 +46,6 @@ const SettingsPanel = () => {
           currency_symbol: (data as any).currency_symbol || "₹",
           opening_hours: (data as any).opening_hours || "",
           logo_url: (data as any).logo_url || "",
-          wifi_password: (data as any).wifi_password || "",
           tax_percent: (data as any).tax_percent || 0,
         });
       }
