@@ -47,7 +47,7 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
       .single();
 
     if (orderError || !order) {
-      toast({ title: "Error placing order", description: orderError?.message, variant: "destructive" });
+      toast({ title: "Error placing order", description: getUserFriendlyError(orderError), variant: "destructive" });
       setSubmitting(false);
       setConfirmOpen(false);
       return;
