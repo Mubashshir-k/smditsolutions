@@ -117,6 +117,38 @@ export type Database = {
           },
         ]
       }
+      order_history: {
+        Row: {
+          completed_at: string
+          id: string
+          order_id: string
+          table_number: number
+          total: number
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          order_id: string
+          table_number: number
+          total?: number
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          order_id?: string
+          table_number?: number
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           created_at: string
