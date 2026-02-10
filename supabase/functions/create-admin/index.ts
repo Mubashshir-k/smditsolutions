@@ -16,7 +16,7 @@ Deno.serve(async (req) => {
     const authHeader = req.headers.get("Authorization");
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    if (!authHeader || !authHeader.replace("Bearer ", "") .trim() !== serviceRoleKey) {
+    if (!authHeader || authHeader.replace("Bearer ", "").trim() !== serviceRoleKey) {
       // Fallback: check if caller is an authenticated admin
       const supabaseAuth = createClient(
         Deno.env.get("SUPABASE_URL")!,
