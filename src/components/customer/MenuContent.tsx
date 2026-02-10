@@ -152,7 +152,7 @@ const MenuContent = () => {
             <h2 className="text-lg font-semibold text-foreground mb-3">
               {group.name}
             </h2>
-            <div className="space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               {group.items.map((item) => (
                 <MenuItemCard
                   key={item.id}
