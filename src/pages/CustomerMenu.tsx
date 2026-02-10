@@ -14,7 +14,7 @@ const CustomerMenu = () => {
   const [validating, setValidating] = useState(true);
   const [invalid, setInvalid] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
-  const [restaurantName, setRestaurantName] = useState("Restaurant");
+  const restaurantName = "SMD IT Solutions";
 
   useEffect(() => {
     const validate = async () => {
@@ -40,15 +40,6 @@ const CustomerMenu = () => {
     };
 
     validate();
-
-    supabase
-      .from("public_restaurant_settings" as any)
-      .select("name")
-      .limit(1)
-      .single()
-      .then(({ data }: any) => {
-        if (data?.name) setRestaurantName(data.name);
-      });
   }, [tableParam]);
 
   if (validating) {
