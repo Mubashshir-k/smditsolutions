@@ -50,6 +50,15 @@ const TablesPanel = () => {
       toast({ title: "Cannot delete", description: "Table has an active order", variant: "destructive" });
       return;
     }
+
+    // First delete related order_items, then orders referencing this table
+    const { data: orders } = await supabase.from("orders").select("id").eq("table_number", table.table_number);
+    if (orders && orders.length > 0) {
+      const orderIds = orders.map((o) => o.id);
+      await supabase.from("order_items").delete().in("order_id", orderIds);
+      await supabase.from("orders").delete().eq("table_number", table.table_number);
+    }
+
     const { error } = await supabase.from("tables").delete().eq("id", table.id);
     if (error) {
       toast({ title: "Error", description: getUserFriendlyError(error), variant: "destructive" });
