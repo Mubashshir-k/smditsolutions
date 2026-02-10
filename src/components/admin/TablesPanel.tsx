@@ -50,8 +50,12 @@ const TablesPanel = () => {
       toast({ title: "Cannot delete", description: "Table has an active order", variant: "destructive" });
       return;
     }
-    await supabase.from("tables").delete().eq("id", table.id);
-    fetchTables();
+    const { error } = await supabase.from("tables").delete().eq("id", table.id);
+    if (error) {
+      toast({ title: "Error", description: getUserFriendlyError(error), variant: "destructive" });
+    } else {
+      fetchTables();
+    }
   };
 
   const getTableUrl = (tableNumber: number) => {
