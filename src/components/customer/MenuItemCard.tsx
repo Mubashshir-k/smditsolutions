@@ -15,6 +15,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
   const { addItem, items, updateQuantity, removeItem, updateInstructions } = useCart();
   const p = item.menu_item_pricing;
   const [portion, setPortion] = useState<"half" | "full">("half");
+  const [localInstructions, setLocalInstructions] = useState("");
 
   const currentPortion = p?.has_half_full ? portion : "single";
   const cartItem = items.find(
@@ -22,14 +23,26 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
   );
   const qty = cartItem?.quantity || 0;
 
+  // Use cart instructions if in cart, otherwise local state
+  const currentInstructions = cartItem ? cartItem.instructions : localInstructions;
+
+  const handleInstructionsChange = (value: string) => {
+    if (cartItem) {
+      updateInstructions(item.id, currentPortion, value);
+    } else {
+      setLocalInstructions(value);
+    }
+  };
+
   const handleAdd = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     if (p?.has_half_full) {
       const price = portion === "half" ? p.half_price! : p.full_price!;
-      addItem({ itemId: item.id, name: item.name, portion, price, instructions: "" });
+      addItem({ itemId: item.id, name: item.name, portion, price, instructions: localInstructions });
     } else {
-      addItem({ itemId: item.id, name: item.name, portion: "single", price: p?.single_price || 0, instructions: "" });
+      addItem({ itemId: item.id, name: item.name, portion: "single", price: p?.single_price || 0, instructions: localInstructions });
     }
+    setLocalInstructions("");
   };
 
   const handleDecrease = (e?: React.MouseEvent) => {
@@ -135,8 +148,8 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
           {item.allow_instructions && (
             <textarea
               placeholder="Add cooking instructions (e.g. Extra spicy, Less spicy, No onion, Less oil)"
-              value={cartItem?.instructions || ""}
-              onChange={(e) => updateInstructions(item.id, currentPortion, e.target.value)}
+              value={currentInstructions}
+              onChange={(e) => handleInstructionsChange(e.target.value)}
               className="flex w-full rounded-lg border border-input bg-background px-3 py-2 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-24 resize-none"
               maxLength={100}
             />
