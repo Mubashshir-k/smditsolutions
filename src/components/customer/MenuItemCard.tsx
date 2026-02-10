@@ -148,8 +148,8 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
           {item.allow_instructions && (
             <textarea
               placeholder="Add cooking instructions (e.g. Extra spicy, Less spicy, No onion, Less oil)"
-              value={cartItem?.instructions || ""}
-              onChange={(e) => updateInstructions(item.id, currentPortion, e.target.value)}
+              value={currentInstructions}
+              onChange={(e) => handleInstructionsChange(e.target.value)}
               className="flex w-full rounded-lg border border-input bg-background px-3 py-2 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-24 resize-none"
               maxLength={100}
             />
