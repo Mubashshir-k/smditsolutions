@@ -17,29 +17,43 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    const adminEmail = "admin@restaurant.com";
+
     // Check if admin already exists
     const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
-    const adminExists = existingUsers?.users?.some(
-      (u) => u.email === "admin@restaurant.com"
+    const existingAdmin = existingUsers?.users?.find(
+      (u) => u.email === adminEmail
     );
 
-    if (adminExists) {
+    if (existingAdmin) {
+      // Ensure role is assigned even if user already exists
+      await supabaseAdmin
+        .from("user_roles")
+        .upsert({ user_id: existingAdmin.id, role: "admin" }, { onConflict: "user_id,role" });
+
       return new Response(
-        JSON.stringify({ message: "Admin already exists" }),
+        JSON.stringify({ message: "Admin already exists, role ensured" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
-      email: "admin@restaurant.com",
+      email: adminEmail,
       password: "admin123",
       email_confirm: true,
     });
 
     if (error) throw error;
 
+    // Assign admin role
+    const { error: roleError } = await supabaseAdmin
+      .from("user_roles")
+      .insert({ user_id: data.user!.id, role: "admin" });
+
+    if (roleError) throw roleError;
+
     return new Response(
-      JSON.stringify({ message: "Admin created", user: data.user?.id }),
+      JSON.stringify({ message: "Admin created with role", user: data.user?.id }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
