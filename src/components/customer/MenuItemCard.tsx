@@ -100,7 +100,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
       <div
         className="overflow-hidden transition-all duration-200"
         style={{
-          maxHeight: isExpanded ? "300px" : "0px",
+          maxHeight: isExpanded ? "400px" : "0px",
           opacity: isExpanded ? 1 : 0,
         }}
       >
