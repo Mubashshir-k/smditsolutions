@@ -196,48 +196,6 @@ export type Database = {
           },
         ]
       }
-      restaurant_settings: {
-        Row: {
-          address: string | null
-          created_at: string
-          currency_symbol: string
-          description: string | null
-          id: string
-          logo_url: string | null
-          name: string
-          opening_hours: string | null
-          phone: string | null
-          tax_percent: number
-          updated_at: string
-        }
-        Insert: {
-          address?: string | null
-          created_at?: string
-          currency_symbol?: string
-          description?: string | null
-          id?: string
-          logo_url?: string | null
-          name?: string
-          opening_hours?: string | null
-          phone?: string | null
-          tax_percent?: number
-          updated_at?: string
-        }
-        Update: {
-          address?: string | null
-          created_at?: string
-          currency_symbol?: string
-          description?: string | null
-          id?: string
-          logo_url?: string | null
-          name?: string
-          opening_hours?: string | null
-          phone?: string | null
-          tax_percent?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
       tables: {
         Row: {
           active_order_id: string | null
@@ -279,48 +237,7 @@ export type Database = {
       }
     }
     Views: {
-      public_restaurant_settings: {
-        Row: {
-          address: string | null
-          created_at: string | null
-          currency_symbol: string | null
-          description: string | null
-          id: string | null
-          logo_url: string | null
-          name: string | null
-          opening_hours: string | null
-          phone: string | null
-          tax_percent: number | null
-          updated_at: string | null
-        }
-        Insert: {
-          address?: string | null
-          created_at?: string | null
-          currency_symbol?: string | null
-          description?: string | null
-          id?: string | null
-          logo_url?: string | null
-          name?: string | null
-          opening_hours?: string | null
-          phone?: string | null
-          tax_percent?: number | null
-          updated_at?: string | null
-        }
-        Update: {
-          address?: string | null
-          created_at?: string | null
-          currency_symbol?: string | null
-          description?: string | null
-          id?: string | null
-          logo_url?: string | null
-          name?: string | null
-          opening_hours?: string | null
-          phone?: string | null
-          tax_percent?: number | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       has_role: {

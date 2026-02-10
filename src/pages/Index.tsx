@@ -1,23 +1,10 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { UtensilsCrossed, LogIn } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [restaurantName, setRestaurantName] = useState("My Restaurant");
-
-  useEffect(() => {
-    supabase
-      .from("public_restaurant_settings" as any)
-      .select("name")
-      .limit(1)
-      .single()
-      .then(({ data }: any) => {
-        if (data?.name) setRestaurantName(data.name);
-      });
-  }, []);
+  const restaurantName = "SMD IT Solutions";
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
