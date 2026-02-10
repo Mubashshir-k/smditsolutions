@@ -30,7 +30,6 @@ const SettingsPanel = () => {
     currency_symbol: "₹",
     opening_hours: "",
     logo_url: "",
-    wifi_password: "",
     tax_percent: 0,
   });
   const [loading, setLoading] = useState(false);
