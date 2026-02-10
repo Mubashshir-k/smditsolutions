@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { getUserFriendlyError } from "@/lib/errorUtils";
+
 
 interface Props {
   tableNumber: number;
@@ -23,55 +23,28 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
   const placeOrder = async () => {
     setSubmitting(true);
 
-    const { data: table } = await supabase
-      .from("tables")
-      .select("active_order_id")
-      .eq("table_number", tableNumber)
-      .single();
+    const { data, error } = await supabase.functions.invoke("create-order", {
+      body: {
+        table_number: tableNumber,
+        items: items.map((item) => ({
+          menu_item_id: item.itemId,
+          portion: item.portion,
+          quantity: item.quantity,
+          instructions: item.instructions,
+        })),
+      },
+    });
 
-    if (table?.active_order_id) {
+    if (error || data?.error) {
       toast({
-        title: "Order in progress",
-        description: "Your table already has an active order. Please wait for it to complete.",
+        title: "Error placing order",
+        description: data?.error || "An error occurred. Please try again.",
         variant: "destructive",
       });
       setSubmitting(false);
       setConfirmOpen(false);
       return;
     }
-
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
-      .insert({ table_number: tableNumber, total, status: "pending" })
-      .select("id")
-      .single();
-
-    if (orderError || !order) {
-      toast({ title: "Error placing order", description: getUserFriendlyError(orderError), variant: "destructive" });
-      setSubmitting(false);
-      setConfirmOpen(false);
-      return;
-    }
-
-    const orderItems = items.map((item) => ({
-      order_id: order.id,
-      item_name: item.name,
-      portion: item.portion,
-      quantity: item.quantity,
-      price: item.price,
-      subtotal: item.price * item.quantity,
-      instructions: item.instructions?.trim() || null,
-    }));
-
-    const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
-    if (itemsError) {
-      toast({ title: "Error", description: getUserFriendlyError(itemsError), variant: "destructive" });
-      setSubmitting(false);
-      setConfirmOpen(false);
-      return;
-    }
-
-    await supabase.from("tables").update({ active_order_id: order.id }).eq("table_number", tableNumber);
 
     clearCart();
     setConfirmOpen(false);
