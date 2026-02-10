@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { getUserFriendlyError } from "@/lib/errorUtils";
-import { Store, Phone, MapPin, Clock, Wifi, Receipt, Image } from "lucide-react";
+import { Store, Phone, MapPin, Clock, Receipt, Image } from "lucide-react";
 
 interface Settings {
   name: string;
@@ -18,8 +18,7 @@ interface Settings {
   currency_symbol: string;
   opening_hours: string;
   logo_url: string;
-  wifi_password: string;
-  tax_percent: number;
+    tax_percent: number;
 }
 
 const SettingsPanel = () => {
@@ -31,7 +30,6 @@ const SettingsPanel = () => {
     currency_symbol: "₹",
     opening_hours: "",
     logo_url: "",
-    wifi_password: "",
     tax_percent: 0,
   });
   const [loading, setLoading] = useState(false);
@@ -48,7 +46,6 @@ const SettingsPanel = () => {
           currency_symbol: (data as any).currency_symbol || "₹",
           opening_hours: (data as any).opening_hours || "",
           logo_url: (data as any).logo_url || "",
-          wifi_password: (data as any).wifi_password || "",
           tax_percent: (data as any).tax_percent || 0,
         });
       }
@@ -71,7 +68,6 @@ const SettingsPanel = () => {
         currency_symbol: settings.currency_symbol.trim() || "₹",
         opening_hours: settings.opening_hours.trim() || null,
         logo_url: settings.logo_url.trim() || null,
-        wifi_password: settings.wifi_password.trim() || null,
         tax_percent: Number(settings.tax_percent) || 0,
       } as any)
       .neq("id", "");
@@ -162,11 +158,6 @@ const SettingsPanel = () => {
               onChange={(e) => update("opening_hours", e.target.value)}
               placeholder="Mon–Sat: 11am – 11pm, Sun: 12pm – 10pm"
             />
-          </div>
-          <div className="space-y-2">
-            <Label className="flex items-center gap-1.5"><Wifi className="h-3.5 w-3.5" /> WiFi Password</Label>
-            <Input value={settings.wifi_password} onChange={(e) => update("wifi_password", e.target.value)} placeholder="restaurant_wifi_2024" />
-            <p className="text-xs text-muted-foreground">Displayed on customer menu for convenience</p>
           </div>
         </CardContent>
       </Card>
