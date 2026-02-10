@@ -78,7 +78,7 @@ const OrderHistoryPanel = () => {
   }, [fetchHistory]);
 
   const clearHistory = async () => {
-    const { error } = await supabase.from("order_history").delete().neq("id", "");
+    const { error } = await supabase.from("order_history").delete().gte("completed_at", "1970-01-01");
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
