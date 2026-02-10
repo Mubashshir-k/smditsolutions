@@ -46,7 +46,7 @@ const CustomerMenu = () => {
       .select("name")
       .limit(1)
       .single()
-      .then(({ data }) => {
+      .then(({ data }: any) => {
         if (data?.name) setRestaurantName(data.name);
       });
   }, [tableParam]);
