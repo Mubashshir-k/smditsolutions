@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogOut, ClipboardList, UtensilsCrossed, Grid3X3 } from "lucide-react";
+import { LogOut, ClipboardList, UtensilsCrossed, Grid3X3, BarChart3 } from "lucide-react";
 import OrdersPanel from "@/components/admin/OrdersPanel";
 import MenuPanel from "@/components/admin/MenuPanel";
 import TablesPanel from "@/components/admin/TablesPanel";
+import OrderHistoryPanel from "@/components/admin/OrderHistoryPanel";
 
 const AdminDashboard = () => {
   const { signOut } = useAuth();
@@ -25,7 +26,7 @@ const AdminDashboard = () => {
 
       <main className="max-w-5xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full grid grid-cols-3 mb-6">
+          <TabsList className="w-full grid grid-cols-4 mb-6">
             <TabsTrigger value="orders" className="gap-1.5 text-xs sm:text-sm">
               <ClipboardList className="h-4 w-4" />
               <span className="hidden sm:inline">Orders</span>
@@ -38,12 +39,16 @@ const AdminDashboard = () => {
               <Grid3X3 className="h-4 w-4" />
               <span className="hidden sm:inline">Tables</span>
             </TabsTrigger>
+            <TabsTrigger value="history" className="gap-1.5 text-xs sm:text-sm">
+              <BarChart3 className="h-4 w-4" />
+              <span className="hidden sm:inline">History</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="orders"><OrdersPanel /></TabsContent>
           <TabsContent value="menu"><MenuPanel /></TabsContent>
           <TabsContent value="tables"><TablesPanel /></TabsContent>
-          
+          <TabsContent value="history"><OrderHistoryPanel /></TabsContent>
         </Tabs>
       </main>
     </div>
