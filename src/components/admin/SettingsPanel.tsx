@@ -68,7 +68,6 @@ const SettingsPanel = () => {
         currency_symbol: settings.currency_symbol.trim() || "₹",
         opening_hours: settings.opening_hours.trim() || null,
         logo_url: settings.logo_url.trim() || null,
-        wifi_password: settings.wifi_password.trim() || null,
         tax_percent: Number(settings.tax_percent) || 0,
       } as any)
       .neq("id", "");
