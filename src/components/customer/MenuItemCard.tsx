@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-
 import { useCart } from "@/hooks/useCart";
 import { Plus, Minus } from "lucide-react";
 import type { MenuItemData } from "./MenuContent";
@@ -23,7 +22,6 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
   );
   const qty = cartItem?.quantity || 0;
 
-  // Use cart instructions if in cart, otherwise local state
   const currentInstructions = cartItem ? cartItem.instructions : localInstructions;
 
   const handleInstructionsChange = (value: string) => {
@@ -59,12 +57,10 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
     : `₹${p?.single_price || 0}`;
 
   return (
-    <div
-      className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden transition-all duration-200 cursor-pointer"
-      onClick={onToggleExpand}
-    >
-      {/* Collapsed row */}
-      <div className="flex gap-3">
+    <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+      {/* Main row: info + anchored controls */}
+      <div className="flex gap-3 cursor-pointer" onClick={onToggleExpand}>
+        {/* Thumbnail */}
         <div className="h-20 w-20 shrink-0 overflow-hidden rounded-l-xl bg-muted">
           {item.image_url ? (
             <img
@@ -92,24 +88,38 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
             <p className="text-sm text-primary font-semibold mt-1">{priceDisplay}</p>
           </div>
 
-          {/* Collapsed: show Add button or qty badge */}
-          {!isExpanded && (
-            <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
-              {qty === 0 ? (
-                <Button size="sm" className="h-8 px-3 gap-1 text-xs" onClick={(e) => { handleAdd(e); onToggleExpand(); }}>
-                  <Plus className="h-3.5 w-3.5" /> Add
+          {/* Anchored controls — always in same position */}
+          <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+            {qty === 0 ? (
+              <Button size="sm" className="h-8 px-3 gap-1 text-xs" onClick={(e) => { handleAdd(e); if (!isExpanded) onToggleExpand(); }}>
+                <Plus className="h-3.5 w-3.5" /> Add
+              </Button>
+            ) : (
+              <div className="flex items-center gap-1 bg-primary rounded-full px-0.5">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-7 w-7 rounded-full text-primary-foreground hover:bg-primary/80"
+                  onClick={handleDecrease}
+                >
+                  <Minus className="h-3.5 w-3.5" />
                 </Button>
-              ) : (
-                <span className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-bold">
-                  {qty}
-                </span>
-              )}
-            </div>
-          )}
+                <span className="text-xs font-bold text-primary-foreground w-5 text-center">{qty}</span>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="h-7 w-7 rounded-full text-primary-foreground hover:bg-primary/80"
+                  onClick={() => handleAdd()}
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Expanded section */}
+      {/* Expanded section — grows BELOW the button row, buttons stay anchored above */}
       <div
         className="overflow-hidden transition-all duration-200"
         style={{
@@ -117,7 +127,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
           opacity: isExpanded ? 1 : 0,
         }}
       >
-        <div className="px-3 pb-3 pt-2 space-y-3" onClick={(e) => e.stopPropagation()}>
+        <div className="px-3 pb-3 pt-2 space-y-3 border-t border-border" onClick={(e) => e.stopPropagation()}>
           {/* Portion toggle */}
           {p?.has_half_full && (
             <div className="flex gap-2">
@@ -154,35 +164,6 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
               maxLength={100}
             />
           )}
-
-          {/* Quantity controls */}
-          <div className="flex items-center justify-center gap-3">
-            {qty > 0 ? (
-              <div className="flex items-center gap-2 bg-primary rounded-full px-1">
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-9 w-9 rounded-full text-primary-foreground hover:bg-primary/80"
-                  onClick={handleDecrease}
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <span className="text-sm font-bold text-primary-foreground w-6 text-center">{qty}</span>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-9 w-9 rounded-full text-primary-foreground hover:bg-primary/80"
-                  onClick={() => handleAdd()}
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <Button className="w-full h-9 rounded-full gap-1 text-xs" onClick={() => handleAdd()}>
-                <Plus className="h-3.5 w-3.5" /> Add to Cart
-              </Button>
-            )}
-          </div>
         </div>
       </div>
     </div>
