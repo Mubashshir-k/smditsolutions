@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { Plus, Minus } from "lucide-react";
 import type { MenuItemData } from "./MenuContent";
@@ -57,11 +56,11 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
     : `₹${p?.single_price || 0}`;
 
   return (
-    <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
-      {/* Main row: info + anchored controls */}
-      <div className="flex gap-3 cursor-pointer" onClick={onToggleExpand}>
-        {/* Thumbnail */}
-        <div className="h-20 w-20 shrink-0 overflow-hidden rounded-l-xl bg-muted">
+    <div className="rounded-2xl bg-card text-card-foreground shadow-sm overflow-hidden border border-border">
+      {/* Main row: image left, info + button right */}
+      <div className="flex cursor-pointer" onClick={onToggleExpand}>
+        {/* Square thumbnail */}
+        <div className="h-28 w-28 sm:h-32 sm:w-32 shrink-0 overflow-hidden bg-muted">
           {item.image_url ? (
             <img
               src={item.image_url}
@@ -73,53 +72,58 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
               }}
             />
           ) : (
-            <div className="h-full w-full flex items-center justify-center text-muted-foreground text-2xl">
+            <div className="h-full w-full flex items-center justify-center text-muted-foreground text-3xl">
               🍽
             </div>
           )}
         </div>
 
-        <div className="flex flex-1 items-center justify-between py-2.5 pr-3 min-w-0">
-          <div className="flex-1 min-w-0 mr-3">
-            <p className="font-medium text-foreground text-sm leading-tight">{item.name}</p>
-            {item.description && (
-              <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{item.description}</p>
-            )}
-            <p className="text-sm text-primary font-semibold mt-1">{priceDisplay}</p>
+        {/* Info + controls */}
+        <div className="flex flex-1 flex-col justify-between p-3 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <p className="font-bold text-foreground text-base leading-tight">{item.name}</p>
+              {item.description && (
+                <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
+              )}
+            </div>
           </div>
 
-          {/* Anchored controls — always in same position */}
-          <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
-            {qty === 0 ? (
-              <Button size="sm" className="h-8 px-3 gap-1 text-xs" onClick={(e) => { handleAdd(e); if (!isExpanded) onToggleExpand(); }}>
-                <Plus className="h-3.5 w-3.5" /> Add
-              </Button>
-            ) : (
-              <div className="flex items-center gap-1 bg-primary rounded-full px-0.5">
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-7 w-7 rounded-full text-primary-foreground hover:bg-primary/80"
-                  onClick={handleDecrease}
+          {/* Price + Add button row — anchored at bottom */}
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-base font-bold text-foreground">{priceDisplay}</p>
+
+            <div onClick={(e) => e.stopPropagation()}>
+              {qty === 0 ? (
+                <button
+                  className="px-4 py-1.5 text-sm font-semibold rounded-lg border-2 border-primary text-primary bg-card hover:bg-primary/5 transition-colors"
+                  onClick={(e) => { handleAdd(e); if (!isExpanded) onToggleExpand(); }}
                 >
-                  <Minus className="h-3.5 w-3.5" />
-                </Button>
-                <span className="text-xs font-bold text-primary-foreground w-5 text-center">{qty}</span>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-7 w-7 rounded-full text-primary-foreground hover:bg-primary/80"
-                  onClick={() => handleAdd()}
-                >
-                  <Plus className="h-3.5 w-3.5" />
-                </Button>
-              </div>
-            )}
+                  ADD +
+                </button>
+              ) : (
+                <div className="flex items-center gap-0.5 rounded-lg border-2 border-primary overflow-hidden">
+                  <button
+                    className="h-8 w-8 flex items-center justify-center text-primary hover:bg-primary/5 transition-colors"
+                    onClick={handleDecrease}
+                  >
+                    <Minus className="h-3.5 w-3.5" />
+                  </button>
+                  <span className="text-sm font-bold text-primary w-6 text-center">{qty}</span>
+                  <button
+                    className="h-8 w-8 flex items-center justify-center text-primary hover:bg-primary/5 transition-colors"
+                    onClick={() => handleAdd()}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Expanded section — grows BELOW the button row, buttons stay anchored above */}
+      {/* Expanded section — grows BELOW the button row */}
       <div
         className="overflow-hidden transition-all duration-200"
         style={{
@@ -135,7 +139,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
                 className={`flex-1 text-xs py-2 rounded-full border font-medium transition-colors ${
                   portion === "half"
                     ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-foreground border-border"
+                    : "bg-card text-foreground border-border"
                 }`}
                 onClick={() => setPortion("half")}
               >
@@ -145,7 +149,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
                 className={`flex-1 text-xs py-2 rounded-full border font-medium transition-colors ${
                   portion === "full"
                     ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-foreground border-border"
+                    : "bg-card text-foreground border-border"
                 }`}
                 onClick={() => setPortion("full")}
               >
@@ -157,10 +161,10 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
           {/* Instructions input */}
           {item.allow_instructions && (
             <textarea
-              placeholder="Add cooking instructions (e.g. Extra spicy, Less spicy, No onion, Less oil)"
+              placeholder="Add cooking instructions (e.g. Extra spicy, No onion)"
               value={currentInstructions}
               onChange={(e) => handleInstructionsChange(e.target.value)}
-              className="flex w-full rounded-lg border border-input bg-background px-3 py-2 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-24 resize-none"
+              className="flex w-full rounded-lg border border-input bg-background px-3 py-2 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 h-20 resize-none"
               maxLength={100}
             />
           )}

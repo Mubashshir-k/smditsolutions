@@ -113,23 +113,18 @@ const MenuContent = () => {
 
   return (
     <div className="pb-4">
-      {/* "Order Now" heading */}
-      <div className="px-4 pt-4 pb-2">
-        <h1 className="text-2xl font-bold text-foreground">Order Now</h1>
-      </div>
-
       {/* Category tabs */}
-      <div className="sticky top-[68px] z-20 bg-background border-b border-border">
+      <div className="sticky top-[52px] z-20 bg-background border-b border-border">
         <ScrollArea className="w-full">
-          <div className="flex gap-1 px-4 py-2">
+          <div className="flex gap-2 px-4 py-3">
             {grouped.map((g) => (
               <button
                 key={g.id}
                 onClick={() => handleTabClick(g.id)}
-                className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                className={`shrink-0 rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
                   activeCategory === g.id
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-muted text-muted-foreground hover:bg-secondary"
                 }`}
               >
                 {g.name}
@@ -149,10 +144,10 @@ const MenuContent = () => {
             data-cat-id={group.id}
             className="scroll-mt-[120px]"
           >
-            <h2 className="text-lg font-semibold text-foreground mb-3">
+            <h2 className="text-lg font-bold text-foreground mb-3">
               {group.name}
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+            <div className="grid grid-cols-1 gap-3">
               {group.items.map((item) => (
                 <MenuItemCard
                   key={item.id}

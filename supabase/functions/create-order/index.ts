@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Validate table exists
+    // Validate table exists (no longer block if active order exists)
     const { data: table } = await supabaseAdmin
       .from("tables")
       .select("table_number, active_order_id")
@@ -45,13 +45,6 @@ Deno.serve(async (req) => {
       return new Response(
         JSON.stringify({ error: "Invalid table" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    if (table.active_order_id) {
-      return new Response(
-        JSON.stringify({ error: "Table already has an active order" }),
-        { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -186,7 +179,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Update table's active order
+    // Update table's active order to the latest
     await supabaseAdmin
       .from("tables")
       .update({ active_order_id: order.id })

@@ -14,10 +14,10 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 border-b border-border bg-primary shadow-md">
         <div className="flex items-center justify-between px-4 py-3 max-w-5xl mx-auto">
-          <h1 className="text-lg font-bold text-foreground">Admin Dashboard</h1>
-          <Button variant="ghost" size="sm" onClick={signOut} className="gap-2">
+          <h1 className="text-lg font-bold text-primary-foreground">Admin Dashboard</h1>
+          <Button variant="ghost" size="sm" onClick={signOut} className="gap-2 text-primary-foreground hover:bg-primary-foreground/10">
             <LogOut className="h-4 w-4" />
             Logout
           </Button>
