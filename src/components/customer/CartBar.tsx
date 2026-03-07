@@ -139,17 +139,20 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
         </Sheet>
       )}
 
-      {/* Sticky bottom Continue button */}
+      {/* Sticky bottom View Order bar */}
       {itemCount > 0 && !sheetOpen && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-card/95 backdrop-blur-sm border-t px-4 py-3">
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-primary shadow-[0_-4px_20px_rgba(0,0,0,0.2)]">
           <div className="max-w-3xl mx-auto">
-            <Button
-              className="w-full h-12 text-base font-semibold gap-2"
+            <button
+              className="w-full flex items-center justify-between px-5 py-4 text-primary-foreground"
               onClick={() => setSheetOpen(true)}
             >
-              <ShoppingCart className="h-5 w-5" />
-              Continue — {itemCount} {itemCount === 1 ? "item" : "items"} • ₹{total}
-            </Button>
+              <div className="flex items-center gap-2">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="font-bold text-base">View Order</span>
+              </div>
+              <span className="font-bold text-lg">₹{total}</span>
+            </button>
           </div>
         </div>
       )}
