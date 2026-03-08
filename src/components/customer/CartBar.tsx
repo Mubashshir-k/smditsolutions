@@ -49,8 +49,6 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
     setConfirmOpen(false);
     setSheetOpen(false);
     setSubmitting(false);
-    setCustomerName("");
-    setCustomerPhone("");
     onOrderPlaced();
   };
 
