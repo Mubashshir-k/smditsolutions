@@ -70,14 +70,16 @@ const CustomerMenu = () => {
   return (
     <CartProvider>
       <div className="min-h-screen bg-background pb-24">
-        {/* Header with restaurant branding */}
-        <header className="sticky top-0 z-40 bg-primary px-4 py-3 shadow-md">
-          <div className="max-w-3xl mx-auto flex items-center justify-between">
+        {/* Header — cream/white bg, logo left, cart right */}
+        <header className="sticky top-0 z-40 bg-card">
+          <div className="max-w-3xl mx-auto flex items-center justify-between px-4 py-3">
             <div>
-              <h1 className="text-lg md:text-xl font-bold text-primary-foreground">{restaurantName}</h1>
-              <p className="text-xs text-primary-foreground/80">Table {tableNumber}</p>
+              <h1 className="text-lg md:text-xl font-bold text-primary tracking-tight">{restaurantName}</h1>
+              <p className="text-[10px] text-muted-foreground">Table {tableNumber}</p>
             </div>
           </div>
+          {/* Thin accent line */}
+          <div className="h-[2px] bg-primary" />
         </header>
 
         <div className="max-w-3xl mx-auto">

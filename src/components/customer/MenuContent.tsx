@@ -93,7 +93,7 @@ const MenuContent = () => {
           }
         }
       },
-      { rootMargin: "-120px 0px -60% 0px", threshold: 0 }
+      { rootMargin: "-140px 0px -60% 0px", threshold: 0 }
     );
 
     Object.values(sectionRefs.current).forEach((el) => {
@@ -114,17 +114,17 @@ const MenuContent = () => {
   return (
     <div className="pb-4">
       {/* Category tabs */}
-      <div className="sticky top-[60px] z-20 bg-background border-b border-border" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+      <div className="sticky top-[50px] z-20 bg-background pt-4 pb-2">
         <ScrollArea className="w-full">
-          <div className="flex gap-2 px-4 py-3">
+          <div className="flex gap-3 px-4">
             {grouped.map((g) => (
               <button
                 key={g.id}
                 onClick={() => handleTabClick(g.id)}
-                className={`shrink-0 rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
+                className={`shrink-0 rounded-full px-6 py-2.5 text-sm font-semibold transition-colors border ${
                   activeCategory === g.id
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-muted text-muted-foreground hover:bg-secondary"
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                    : "bg-card text-foreground border-border hover:bg-secondary"
                 }`}
               >
                 {g.name}
@@ -135,19 +135,22 @@ const MenuContent = () => {
         </ScrollArea>
       </div>
 
+      {/* Separator */}
+      <div className="mx-4 border-b border-border" />
+
       {/* Menu sections */}
-      <div className="px-4 pt-4 space-y-6">
+      <div className="px-4 pt-5 space-y-8">
         {grouped.map((group) => (
           <section
             key={group.id}
             ref={(el) => { sectionRefs.current[group.id] = el; }}
             data-cat-id={group.id}
-            className="scroll-mt-[120px]"
+            className="scroll-mt-[140px]"
           >
-            <h2 className="text-lg font-bold text-foreground mb-3">
+            <h2 className="text-lg font-bold text-foreground mb-4">
               {group.name}
             </h2>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-4">
               {group.items.map((item) => (
                 <MenuItemCard
                   key={item.id}

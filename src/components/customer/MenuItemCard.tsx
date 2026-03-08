@@ -60,7 +60,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
       {/* Main row: image left, info + button right */}
       <div className="flex cursor-pointer" onClick={onToggleExpand}>
         {/* Square thumbnail */}
-        <div className="h-28 w-28 sm:h-32 sm:w-32 shrink-0 overflow-hidden bg-muted">
+        <div className="h-28 w-28 sm:h-32 sm:w-32 shrink-0 overflow-hidden bg-muted m-3 rounded-xl">
           {item.image_url ? (
             <img
               src={item.image_url}
@@ -79,7 +79,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
         </div>
 
         {/* Info + controls */}
-        <div className="flex flex-1 flex-col justify-between p-3 min-w-0">
+        <div className="flex flex-1 flex-col justify-between py-3 pr-3 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
               <p className="font-bold text-foreground text-base leading-tight">{item.name}</p>
@@ -96,7 +96,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
             <div onClick={(e) => e.stopPropagation()}>
               {qty === 0 ? (
                 <button
-                  className="px-4 py-1.5 text-sm font-semibold rounded-lg border-2 border-primary text-primary bg-card hover:bg-primary/5 transition-colors"
+                  className="px-5 py-1.5 text-sm font-semibold rounded-lg border-2 border-primary text-primary bg-card hover:bg-primary/5 transition-colors"
                   onClick={(e) => { handleAdd(e); if (!isExpanded) onToggleExpand(); }}
                 >
                   ADD +
@@ -123,7 +123,7 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
         </div>
       </div>
 
-      {/* Expanded section — grows BELOW the button row */}
+      {/* Expanded section */}
       <div
         className="overflow-hidden transition-all duration-200"
         style={{
@@ -132,7 +132,6 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
         }}
       >
         <div className="px-3 pb-3 pt-2 space-y-3 border-t border-border" onClick={(e) => e.stopPropagation()}>
-          {/* Portion toggle */}
           {p?.has_half_full && (
             <div className="flex gap-2">
               <button
@@ -158,7 +157,6 @@ const MenuItemCard = ({ item, isExpanded, onToggleExpand }: Props) => {
             </div>
           )}
 
-          {/* Instructions input */}
           {item.allow_instructions && (
             <textarea
               placeholder="Add cooking instructions (e.g. Extra spicy, No onion)"
