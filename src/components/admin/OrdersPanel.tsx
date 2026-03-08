@@ -121,13 +121,13 @@ const OrdersPanel = () => {
       <head>
         <title>Print</title>
         <style>
-          @page { size: 58mm auto; margin: 2mm; }
+          @page { size: 80mm auto; margin: 2mm; }
           body {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 11px;
+            font-size: 12px;
             line-height: 1.4;
             color: #000;
-            width: 54mm;
+            max-width: 72mm;
             margin: 0 auto;
             padding: 2mm;
           }
