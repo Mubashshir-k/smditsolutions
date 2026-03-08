@@ -114,14 +114,14 @@ const MenuContent = () => {
   return (
     <div className="pb-4">
       {/* Category tabs */}
-      <div className="relative z-10 bg-background mt-6 mb-6">
+      <div className="relative z-10 bg-background mt-4 mb-4">
         <ScrollArea className="w-full">
-          <div className="flex gap-3 px-4 py-3">
+          <div className="flex gap-3 px-4 py-2">
             {grouped.map((g) => (
               <button
                 key={g.id}
                 onClick={() => handleTabClick(g.id)}
-                className={`shrink-0 rounded-full px-8 py-3.5 text-base font-semibold transition-all border ${
+                className={`shrink-0 rounded-full px-7 py-3 text-sm font-semibold transition-all border ${
                   activeCategory === g.id
                     ? "bg-primary text-primary-foreground border-primary shadow-[0_4px_12px_hsl(0_65%_35%/0.4)] translate-y-[-1px]"
                     : "bg-card text-foreground border-border shadow-[0_3px_6px_rgba(0,0,0,0.15)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.2)] active:translate-y-[1px] active:shadow-[0_1px_3px_rgba(0,0,0,0.12)]"
