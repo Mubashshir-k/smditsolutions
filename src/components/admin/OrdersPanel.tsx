@@ -208,7 +208,7 @@ const OrdersPanel = () => {
         ${orders.map((order) => `<div style="border-bottom:1px dashed #000;margin-bottom:6px;">${buildOrderHtml(order)}</div>`).join("")}
       `;
     }
-    openPrintWindow(content);
+    openPrintWindow(restaurantHeader + content + receiptFooter);
   };
 
   const handlePrintOrder = (order: Order) => {
