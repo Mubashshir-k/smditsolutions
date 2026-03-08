@@ -116,7 +116,7 @@ const MenuContent = () => {
       {/* Category tabs */}
       <div className="relative z-10 bg-background mt-6 mb-6">
         <ScrollArea className="w-full">
-          <div className="flex gap-3 px-4">
+          <div className="flex gap-3 px-4 py-3">
             {grouped.map((g) => (
               <button
                 key={g.id}
