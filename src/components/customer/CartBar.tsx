@@ -168,30 +168,6 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
             <DialogTitle className="text-lg">Confirm Your Order</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 my-2">
-            {/* Customer info fields (optional) */}
-            <div className="space-y-3 bg-muted/50 rounded-xl p-3">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Your Details (Optional)</p>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Your name"
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  className="pl-9 h-10 rounded-lg bg-background"
-                />
-              </div>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Phone number"
-                  type="tel"
-                  value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
-                  className="pl-9 h-10 rounded-lg bg-background"
-                />
-              </div>
-            </div>
-
             {/* Order summary */}
             <div className="space-y-2">
               <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Order Summary — Table {tableNumber}</p>
