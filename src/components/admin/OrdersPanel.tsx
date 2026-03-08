@@ -96,55 +96,9 @@ const OrdersPanel = () => {
     fetchOrders();
   };
 
-  const handlePrint = () => {
-    let content = "";
-
-    if (view === "summary") {
-      // Build kitchen summary HTML
-      const aggregated = new Map<string, number>();
-      orders.forEach((order) => {
-        order.order_items?.forEach((item) => {
-          const key = item.portion !== "single" ? `${item.item_name} (${item.portion})` : item.item_name;
-          aggregated.set(key, (aggregated.get(key) || 0) + item.quantity);
-        });
-      });
-      const sorted = Array.from(aggregated.entries()).sort((a, b) => b[1] - a[1]);
-      content = `
-        <h2 style="text-align:center;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:8px;">Kitchen Summary</h2>
-        ${sorted.map(([name, qty]) => `
-          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #ccc;">
-            <span>${name}</span>
-            <strong style="font-size:16px;">×${qty}</strong>
-          </div>
-        `).join("")}
-      `;
-    } else {
-      // Build individual orders HTML
-      content = `
-        <h2 style="text-align:center;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:8px;">Live Orders (${orders.length})</h2>
-        ${orders.map((order) => `
-          <div style="border-bottom:1px dashed #000;padding:6px 0;margin-bottom:6px;">
-            <div style="display:flex;justify-content:space-between;font-weight:bold;">
-              <span>Table ${order.table_number}</span>
-              <span>[${order.status}]</span>
-            </div>
-            <div style="font-size:10px;color:#666;">${new Date(order.created_at).toLocaleTimeString()}</div>
-            ${order.order_items?.map((item) => `
-              <div style="display:flex;justify-content:space-between;font-size:11px;padding:1px 0;">
-                <span>${item.quantity}x ${item.item_name}${item.portion !== "single" ? ` (${item.portion})` : ""}</span>
-                <span>₹${item.subtotal}</span>
-              </div>
-              ${item.instructions ? `<div style="font-size:9px;color:#666;padding-left:8px;font-style:italic;">📝 ${item.instructions}</div>` : ""}
-            `).join("") || ""}
-            <div style="text-align:right;font-weight:bold;padding-top:3px;border-top:1px solid #eee;">Total: ₹${order.total}</div>
-          </div>
-        `).join("")}
-      `;
-    }
-
+  const openPrintWindow = (content: string) => {
     const printWindow = window.open("", "_blank", "width=400,height=600");
     if (!printWindow) return;
-
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
@@ -171,6 +125,61 @@ const OrdersPanel = () => {
     printWindow.focus();
     printWindow.print();
     printWindow.close();
+  };
+
+  const buildOrderHtml = (order: Order) => `
+    <div style="padding:4px 0;">
+      <div style="display:flex;justify-content:space-between;font-weight:bold;">
+        <span>Table ${order.table_number}</span>
+        <span>[${order.status}]</span>
+      </div>
+      <div style="font-size:10px;color:#666;">${new Date(order.created_at).toLocaleTimeString()}</div>
+      ${order.order_items?.map((item) => `
+        <div style="display:flex;justify-content:space-between;font-size:11px;padding:1px 0;">
+          <span>${item.quantity}x ${item.item_name}${item.portion !== "single" ? ` (${item.portion})` : ""}</span>
+          <span>₹${item.subtotal}</span>
+        </div>
+        ${item.instructions ? `<div style="font-size:9px;color:#666;padding-left:8px;font-style:italic;">📝 ${item.instructions}</div>` : ""}
+      `).join("") || ""}
+      <div style="text-align:right;font-weight:bold;padding-top:3px;border-top:1px solid #eee;">Total: ₹${order.total}</div>
+    </div>
+  `;
+
+  const handlePrint = () => {
+    let content = "";
+    if (view === "summary") {
+      const aggregated = new Map<string, number>();
+      orders.forEach((order) => {
+        order.order_items?.forEach((item) => {
+          const key = item.portion !== "single" ? `${item.item_name} (${item.portion})` : item.item_name;
+          aggregated.set(key, (aggregated.get(key) || 0) + item.quantity);
+        });
+      });
+      const sorted = Array.from(aggregated.entries()).sort((a, b) => b[1] - a[1]);
+      content = `
+        <h2 style="text-align:center;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:8px;">Kitchen Summary</h2>
+        ${sorted.map(([name, qty]) => `
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #ccc;">
+            <span>${name}</span>
+            <strong style="font-size:16px;">×${qty}</strong>
+          </div>
+        `).join("")}
+      `;
+    } else {
+      content = `
+        <h2 style="text-align:center;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:8px;">Live Orders (${orders.length})</h2>
+        ${orders.map((order) => `<div style="border-bottom:1px dashed #000;margin-bottom:6px;">${buildOrderHtml(order)}</div>`).join("")}
+      `;
+    }
+    openPrintWindow(content);
+  };
+
+  const handlePrintOrder = (order: Order) => {
+    const content = `
+      <h2 style="text-align:center;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:8px;">Order — Table ${order.table_number}</h2>
+      ${buildOrderHtml(order)}
+    `;
+    openPrintWindow(content);
   };
 
   if (orders.length === 0) {
