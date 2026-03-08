@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ShoppingCart, Minus, Plus, Trash2, User, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Props {
@@ -17,6 +18,8 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
   const [submitting, setSubmitting] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const { toast } = useToast();
 
   const placeOrder = async () => {
@@ -49,12 +52,14 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
     setConfirmOpen(false);
     setSheetOpen(false);
     setSubmitting(false);
+    setCustomerName("");
+    setCustomerPhone("");
     onOrderPlaced();
   };
 
   return (
     <>
-      {/* Floating cart icon — top right, matches header height */}
+      {/* Floating cart icon — top right */}
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
         <SheetTrigger asChild>
           <button className="fixed top-2 right-4 z-50 flex items-center justify-center bg-primary text-primary-foreground rounded-xl h-10 w-10 shadow-lg">
@@ -160,36 +165,63 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
 
       {/* Confirmation dialog */}
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm rounded-2xl">
           <DialogHeader>
-            <DialogTitle>Confirm Your Order</DialogTitle>
+            <DialogTitle className="text-lg">Confirm Your Order</DialogTitle>
           </DialogHeader>
-          <div className="space-y-2 my-2">
-            <p className="text-sm text-muted-foreground">Table {tableNumber}</p>
-            {items.map((item) => (
-              <div key={`${item.itemId}-${item.portion}`} className="text-sm">
-                <div className="flex justify-between">
-                  <span>
-                    {item.quantity}× {item.name}
-                    {item.portion !== "single" && <span className="text-muted-foreground ml-1">({item.portion})</span>}
-                  </span>
-                  <span>₹{item.price * item.quantity}</span>
-                </div>
-                {item.instructions && (
-                  <p className="text-xs text-muted-foreground italic ml-4">📝 {item.instructions}</p>
-                )}
+          <div className="space-y-4 my-2">
+            {/* Customer info fields (optional) */}
+            <div className="space-y-3 bg-muted/50 rounded-xl p-3">
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Your Details (Optional)</p>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Your name"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  className="pl-9 h-10 rounded-lg bg-background"
+                />
               </div>
-            ))}
-            <div className="border-t pt-2 flex justify-between font-bold">
-              <span>Total</span>
-              <span className="text-primary">₹{total}</span>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Phone number"
+                  type="tel"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  className="pl-9 h-10 rounded-lg bg-background"
+                />
+              </div>
+            </div>
+
+            {/* Order summary */}
+            <div className="space-y-2">
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Order Summary — Table {tableNumber}</p>
+              {items.map((item) => (
+                <div key={`${item.itemId}-${item.portion}`} className="text-sm">
+                  <div className="flex justify-between">
+                    <span>
+                      {item.quantity}× {item.name}
+                      {item.portion !== "single" && <span className="text-muted-foreground ml-1">({item.portion})</span>}
+                    </span>
+                    <span>₹{item.price * item.quantity}</span>
+                  </div>
+                  {item.instructions && (
+                    <p className="text-xs text-muted-foreground italic ml-4">📝 {item.instructions}</p>
+                  )}
+                </div>
+              ))}
+              <div className="border-t pt-2 flex justify-between font-bold text-base">
+                <span>Total</span>
+                <span className="text-primary">₹{total}</span>
+              </div>
             </div>
           </div>
           <DialogFooter className="flex-row gap-2">
-            <Button variant="outline" className="flex-1" onClick={() => setConfirmOpen(false)} disabled={submitting}>
+            <Button variant="outline" className="flex-1 rounded-xl" onClick={() => setConfirmOpen(false)} disabled={submitting}>
               Go Back
             </Button>
-            <Button className="flex-1" onClick={placeOrder} disabled={submitting}>
+            <Button className="flex-1 rounded-xl" onClick={placeOrder} disabled={submitting}>
               {submitting ? "Placing..." : "Confirm Order"}
             </Button>
           </DialogFooter>
