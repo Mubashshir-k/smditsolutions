@@ -114,7 +114,7 @@ const MenuContent = () => {
   return (
     <div className="pb-4">
       {/* Category tabs */}
-      <div className="sticky top-[50px] z-30 bg-background pt-4 pb-2">
+      <div className="relative z-10 bg-background pt-4 pb-2">
         <ScrollArea className="w-full">
           <div className="flex gap-3 px-4">
             {grouped.map((g) => (
