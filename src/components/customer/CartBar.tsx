@@ -136,9 +136,8 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
                 </Button>
               </div>
             </div>
-          </SheetContent>
-        </Sheet>
-      )}
+        </SheetContent>
+      </Sheet>
 
       {/* Sticky bottom View Order bar */}
       {itemCount > 0 && !sheetOpen && (
