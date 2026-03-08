@@ -97,9 +97,25 @@ const OrdersPanel = () => {
   };
 
   const openPrintWindow = (content: string) => {
-    const printWindow = window.open("", "_blank", "width=400,height=600");
-    if (!printWindow) return;
-    printWindow.document.write(`
+    // Remove any existing print iframe
+    const existingFrame = document.getElementById("thermal-print-frame");
+    if (existingFrame) existingFrame.remove();
+
+    const iframe = document.createElement("iframe");
+    iframe.id = "thermal-print-frame";
+    iframe.style.position = "fixed";
+    iframe.style.top = "-10000px";
+    iframe.style.left = "-10000px";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "none";
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!doc) return;
+
+    doc.open();
+    doc.write(`
       <!DOCTYPE html>
       <html>
       <head>
@@ -121,10 +137,15 @@ const OrdersPanel = () => {
       <body>${content}</body>
       </html>
     `);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+    doc.close();
+
+    // Wait for content to render then print
+    setTimeout(() => {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+      // Clean up after printing
+      setTimeout(() => iframe.remove(), 1000);
+    }, 300);
   };
 
   const buildOrderHtml = (order: Order) => `
