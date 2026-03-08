@@ -222,7 +222,12 @@ const OrdersPanel = () => {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base">Table {order.table_number}</CardTitle>
-                <Badge className={statusColors[order.status]}>{order.status}</Badge>
+                <div className="flex items-center gap-1.5">
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handlePrintOrder(order)}>
+                    <Printer className="h-3.5 w-3.5" />
+                  </Button>
+                  <Badge className={statusColors[order.status]}>{order.status}</Badge>
+                </div>
               </div>
               <p className="text-xs text-muted-foreground">
                 {new Date(order.created_at).toLocaleTimeString()}
