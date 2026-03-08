@@ -110,7 +110,7 @@ const OrdersPanel = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" id="orders-print-area">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h2 className="text-xl font-semibold">Live Orders ({orders.length})</h2>
         <div className="flex items-center gap-2">

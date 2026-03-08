@@ -104,3 +104,107 @@
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
+
+/* Thermal Printer Styles — Atpos H58BT (58mm / ~48mm printable) */
+@media print {
+  @page {
+    size: 58mm auto;
+    margin: 2mm;
+  }
+
+  /* Hide everything except the orders print area */
+  body * {
+    visibility: hidden;
+  }
+
+  #orders-print-area,
+  #orders-print-area * {
+    visibility: visible;
+  }
+
+  #orders-print-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 54mm;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    line-height: 1.3;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  /* Reset grid to single column for receipt */
+  #orders-print-area .grid {
+    display: block !important;
+  }
+
+  /* Card styles for print */
+  #orders-print-area [class*="card"] {
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    break-inside: avoid;
+  }
+
+  /* Add separator between cards */
+  #orders-print-area [class*="card"] + [class*="card"] {
+    border-top: 1px dashed #000 !important;
+    padding-top: 3mm !important;
+    margin-top: 3mm !important;
+  }
+
+  /* Remove padding from card content */
+  #orders-print-area [class*="CardContent"],
+  #orders-print-area [class*="CardHeader"] {
+    padding: 1mm 0 !important;
+  }
+
+  /* Make quantities bold and large for kitchen */
+  #orders-print-area .text-3xl {
+    font-size: 18px !important;
+    font-weight: 900 !important;
+  }
+
+  /* Badge print styles */
+  #orders-print-area [class*="badge"] {
+    border: 1px solid #000 !important;
+    background: transparent !important;
+    color: #000 !important;
+    font-size: 10px !important;
+    padding: 0 4px !important;
+    border-radius: 2px !important;
+  }
+
+  /* Hide non-printable elements */
+  #orders-print-area button,
+  #orders-print-area [role="group"] {
+    display: none !important;
+  }
+
+  /* Keep the heading visible */
+  #orders-print-area h2 {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 2mm;
+    margin-bottom: 3mm;
+  }
+
+  /* Force all text to black */
+  #orders-print-area span,
+  #orders-print-area p,
+  #orders-print-area div {
+    color: #000 !important;
+  }
+
+  /* Ensure text wraps properly on narrow paper */
+  #orders-print-area * {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
