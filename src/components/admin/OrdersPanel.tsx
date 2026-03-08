@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getUserFriendlyError } from "@/lib/errorUtils";
 import KitchenSummary from "./KitchenSummary";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { ClipboardList, ChefHat } from "lucide-react";
+import { ClipboardList, ChefHat, Printer } from "lucide-react";
 
 interface OrderItem {
   id: string;
