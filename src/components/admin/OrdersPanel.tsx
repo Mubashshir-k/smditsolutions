@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { getUserFriendlyError } from "@/lib/errorUtils";
+import KitchenSummary from "./KitchenSummary";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ClipboardList, ChefHat } from "lucide-react";
 
 interface OrderItem {
   id: string;
