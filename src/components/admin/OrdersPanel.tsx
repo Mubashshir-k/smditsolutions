@@ -216,7 +216,7 @@ const OrdersPanel = () => {
       <h2 style="text-align:center;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:8px;">Order — Table ${order.table_number}</h2>
       ${buildOrderHtml(order)}
     `;
-    openPrintWindow(content);
+    openPrintWindow(restaurantHeader + content + receiptFooter);
   };
 
   if (orders.length === 0) {
