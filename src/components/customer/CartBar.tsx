@@ -55,20 +55,21 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
 
   return (
     <>
-      {/* Floating cart button - top right */}
-      {itemCount > 0 && (
-        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-          <SheetTrigger asChild>
-            <button className="fixed top-3 right-4 z-50 flex items-center gap-2 bg-primary text-primary-foreground rounded-full pl-3 pr-4 py-2 shadow-lg">
-              <div className="relative">
-                <ShoppingCart className="h-5 w-5" />
+      {/* Floating cart button - top right, always visible */}
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetTrigger asChild>
+          <button className="fixed top-3 right-4 z-50 flex items-center gap-2 bg-primary text-primary-foreground rounded-full pl-3 pr-4 py-2 shadow-lg">
+            <div className="relative">
+              <ShoppingCart className="h-5 w-5" />
+              {itemCount > 0 && (
                 <span className="absolute -top-2 -right-2.5 bg-accent text-accent-foreground text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
                   {itemCount}
                 </span>
-              </div>
-              <span className="font-semibold text-sm">₹{total}</span>
-            </button>
-          </SheetTrigger>
+              )}
+            </div>
+            {itemCount > 0 && <span className="font-semibold text-sm">₹{total}</span>}
+          </button>
+        </SheetTrigger>
           <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto rounded-t-2xl">
             <SheetHeader>
               <SheetTitle className="text-left">Your Order — Table {tableNumber}</SheetTitle>
@@ -135,9 +136,8 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
                 </Button>
               </div>
             </div>
-          </SheetContent>
-        </Sheet>
-      )}
+        </SheetContent>
+      </Sheet>
 
       {/* Sticky bottom View Order bar */}
       {itemCount > 0 && !sheetOpen && (

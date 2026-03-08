@@ -5,6 +5,7 @@ import { CartProvider } from "@/hooks/useCart";
 import MenuContent from "@/components/customer/MenuContent";
 import CartBar from "@/components/customer/CartBar";
 import OrderSuccess from "@/components/customer/OrderSuccess";
+import HeroCarousel from "@/components/customer/HeroCarousel";
 import { AlertCircle } from "lucide-react";
 
 const CustomerMenu = () => {
@@ -70,13 +71,17 @@ const CustomerMenu = () => {
     <CartProvider>
       <div className="min-h-screen bg-background pb-24">
         {/* Header with restaurant branding */}
-        <header className="sticky top-0 z-40 bg-primary px-4 py-3 pr-24 shadow-md">
-          <div className="max-w-3xl mx-auto">
-            <h1 className="text-lg md:text-xl font-bold text-primary-foreground">{restaurantName}</h1>
-            <p className="text-xs text-primary-foreground/80">Table {tableNumber}</p>
+        <header className="sticky top-0 z-40 bg-primary px-4 py-3 shadow-md">
+          <div className="max-w-3xl mx-auto flex items-center justify-between">
+            <div>
+              <h1 className="text-lg md:text-xl font-bold text-primary-foreground">{restaurantName}</h1>
+              <p className="text-xs text-primary-foreground/80">Table {tableNumber}</p>
+            </div>
           </div>
         </header>
+
         <div className="max-w-3xl mx-auto">
+          <HeroCarousel />
           <MenuContent />
         </div>
         <CartBar tableNumber={tableNumber} onOrderPlaced={() => setOrderPlaced(true)} />
