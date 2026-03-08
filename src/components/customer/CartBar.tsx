@@ -127,6 +127,7 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
               <Button
                 className="w-full h-12 text-base font-semibold"
                 onClick={() => setConfirmOpen(true)}
+                disabled={total <= 0 || itemCount === 0}
               >
                 Place Order — ₹{total}
               </Button>
