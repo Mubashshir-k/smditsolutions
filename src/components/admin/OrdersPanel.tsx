@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { getUserFriendlyError } from "@/lib/errorUtils";
+import KitchenSummary from "./KitchenSummary";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { ClipboardList, ChefHat } from "lucide-react";
 
 interface OrderItem {
   id: string;
@@ -40,6 +43,7 @@ const statusColors: Record<string, string> = {
 
 const OrdersPanel = () => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [view, setView] = useState<string>("orders");
   const { toast } = useToast();
 
   const fetchOrders = async () => {
@@ -103,8 +107,24 @@ const OrdersPanel = () => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Live Orders ({orders.length})</h2>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h2 className="text-xl font-semibold">Live Orders ({orders.length})</h2>
+        <ToggleGroup type="single" value={view} onValueChange={(v) => v && setView(v)} className="border rounded-lg">
+          <ToggleGroupItem value="orders" className="gap-1.5 text-xs sm:text-sm px-3">
+            <ClipboardList className="h-4 w-4" />
+            Individual Orders
+          </ToggleGroupItem>
+          <ToggleGroupItem value="summary" className="gap-1.5 text-xs sm:text-sm px-3">
+            <ChefHat className="h-4 w-4" />
+            Kitchen Summary
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      {view === "summary" ? (
+        <KitchenSummary orders={orders} />
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2">
         {orders.map((order) => (
           <Card key={order.id}>
             <CardHeader className="pb-3">
@@ -146,7 +166,8 @@ const OrdersPanel = () => {
             </CardContent>
           </Card>
         ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
