@@ -166,7 +166,8 @@ const OrdersPanel = () => {
             </CardContent>
           </Card>
         ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
