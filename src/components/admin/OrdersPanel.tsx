@@ -43,6 +43,7 @@ const statusColors: Record<string, string> = {
 
 const OrdersPanel = () => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [view, setView] = useState<string>("orders");
   const { toast } = useToast();
 
   const fetchOrders = async () => {
