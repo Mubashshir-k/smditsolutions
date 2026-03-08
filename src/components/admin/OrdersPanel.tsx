@@ -96,6 +96,22 @@ const OrdersPanel = () => {
     fetchOrders();
   };
 
+  const restaurantHeader = `
+    <div style="text-align:center;margin-bottom:6px;border-bottom:2px double #000;padding-bottom:6px;">
+      <div style="font-size:16px;font-weight:bold;letter-spacing:1px;">SMD IT Solutions</div>
+      <div style="font-size:9px;margin-top:2px;">123 Main Street, City - 400001</div>
+      <div style="font-size:9px;">Ph: +91 98765 43210</div>
+      <div style="font-size:9px;">GSTIN: 27XXXXX1234X1ZX</div>
+    </div>
+  `;
+
+  const receiptFooter = `
+    <div style="text-align:center;margin-top:8px;border-top:1px dashed #000;padding-top:6px;font-size:9px;">
+      <div>Thank you for dining with us!</div>
+      <div style="margin-top:2px;">Visit again — SMD IT Solutions</div>
+    </div>
+  `;
+
   const openPrintWindow = (content: string) => {
     // Remove any existing print iframe
     const existingFrame = document.getElementById("thermal-print-frame");
@@ -192,7 +208,7 @@ const OrdersPanel = () => {
         ${orders.map((order) => `<div style="border-bottom:1px dashed #000;margin-bottom:6px;">${buildOrderHtml(order)}</div>`).join("")}
       `;
     }
-    openPrintWindow(content);
+    openPrintWindow(restaurantHeader + content + receiptFooter);
   };
 
   const handlePrintOrder = (order: Order) => {
@@ -200,7 +216,7 @@ const OrdersPanel = () => {
       <h2 style="text-align:center;border-bottom:2px solid #000;padding-bottom:4px;margin-bottom:8px;">Order — Table ${order.table_number}</h2>
       ${buildOrderHtml(order)}
     `;
-    openPrintWindow(content);
+    openPrintWindow(restaurantHeader + content + receiptFooter);
   };
 
   if (orders.length === 0) {
