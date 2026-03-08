@@ -121,10 +121,10 @@ const MenuContent = () => {
               <button
                 key={g.id}
                 onClick={() => handleTabClick(g.id)}
-                className={`shrink-0 rounded-full px-6 py-2.5 text-sm font-semibold transition-colors border ${
+                className={`shrink-0 rounded-full px-6 py-2.5 text-sm font-semibold transition-all border ${
                   activeCategory === g.id
-                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                    : "bg-card text-foreground border-border hover:bg-secondary"
+                    ? "bg-primary text-primary-foreground border-primary shadow-[0_4px_12px_hsl(0_65%_35%/0.4)] translate-y-[-1px]"
+                    : "bg-card text-foreground border-border shadow-[0_3px_6px_rgba(0,0,0,0.15)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.2)] active:translate-y-[1px] active:shadow-[0_1px_3px_rgba(0,0,0,0.12)]"
                 }`}
               >
                 {g.name}
