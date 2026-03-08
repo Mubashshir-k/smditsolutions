@@ -20,16 +20,19 @@ const HeroCarousel = () => {
   return (
     <div className="px-4 pt-3">
       <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl bg-muted">
-        {slides.map((src, i) => (
-          <img
-            key={i}
-            src={src}
-            alt={`Featured dish ${i + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-              i === current ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
+        <div
+          className="flex h-full transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${current * 100}%)` }}
+        >
+          {slides.map((src, i) => (
+            <img
+              key={i}
+              src={src}
+              alt={`Featured dish ${i + 1}`}
+              className="w-full h-full object-cover shrink-0"
+            />
+          ))}
+        </div>
         {/* Dots */}
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
           {slides.map((_, i) => (
