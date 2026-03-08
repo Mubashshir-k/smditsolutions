@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getUserFriendlyError } from "@/lib/errorUtils";
 import KitchenSummary from "./KitchenSummary";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { ClipboardList, ChefHat } from "lucide-react";
+import { ClipboardList, ChefHat, Printer } from "lucide-react";
 
 interface OrderItem {
   id: string;
@@ -96,6 +96,10 @@ const OrdersPanel = () => {
     fetchOrders();
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   if (orders.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground">
@@ -106,19 +110,25 @@ const OrdersPanel = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" id="orders-print-area">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h2 className="text-xl font-semibold">Live Orders ({orders.length})</h2>
-        <ToggleGroup type="single" value={view} onValueChange={(v) => v && setView(v)} className="border rounded-lg">
-          <ToggleGroupItem value="orders" className="gap-1.5 text-xs sm:text-sm px-3">
-            <ClipboardList className="h-4 w-4" />
-            Individual Orders
-          </ToggleGroupItem>
-          <ToggleGroupItem value="summary" className="gap-1.5 text-xs sm:text-sm px-3">
-            <ChefHat className="h-4 w-4" />
-            Kitchen Summary
-          </ToggleGroupItem>
-        </ToggleGroup>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="gap-1.5" onClick={handlePrint}>
+            <Printer className="h-4 w-4" />
+            <span className="hidden sm:inline">Print</span>
+          </Button>
+          <ToggleGroup type="single" value={view} onValueChange={(v) => v && setView(v)} className="border rounded-lg">
+            <ToggleGroupItem value="orders" className="gap-1.5 text-xs sm:text-sm px-3">
+              <ClipboardList className="h-4 w-4" />
+              Individual Orders
+            </ToggleGroupItem>
+            <ToggleGroupItem value="summary" className="gap-1.5 text-xs sm:text-sm px-3">
+              <ChefHat className="h-4 w-4" />
+              Kitchen Summary
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
       </div>
 
       {view === "summary" ? (
