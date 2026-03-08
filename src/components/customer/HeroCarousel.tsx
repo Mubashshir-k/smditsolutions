@@ -18,7 +18,7 @@ const HeroCarousel = () => {
   }, [next]);
 
   return (
-    <div className="px-4 pt-3">
+    <div className="px-4 pt-3 pb-2">
       <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl bg-muted">
         <div
           className="flex h-full transition-transform duration-500 ease-in-out"
