@@ -17,8 +17,7 @@ const CartBar = ({ tableNumber, onOrderPlaced }: Props) => {
   const [submitting, setSubmitting] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [customerName, setCustomerName] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
+  const { toast } = useToast();
   const { toast } = useToast();
 
   const placeOrder = async () => {
