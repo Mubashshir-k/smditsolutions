@@ -205,7 +205,6 @@ const OrdersPanel = () => {
               Kitchen Summary
             </ToggleGroupItem>
           </ToggleGroup>
-        </div>
       </div>
 
       {view === "summary" ? (
