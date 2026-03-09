@@ -68,7 +68,8 @@ const TablesPanel = () => {
   };
 
   const getTableUrl = (tableNumber: number) => {
-    return `${window.location.origin}/menu?table=${tableNumber}`;
+    const publishedDomain = "https://smditsolutions.lovable.app";
+    return `${publishedDomain}/menu?table=${tableNumber}`;
   };
 
   const copyUrl = (tableNumber: number) => {
